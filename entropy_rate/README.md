@@ -1,0 +1,1 @@
+# Submodularity optimization of the entropy rate of subset Markov chains
