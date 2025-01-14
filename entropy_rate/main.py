@@ -19,12 +19,12 @@ if __name__ == "__main__":
     k = 2
 
     # Method 1: Greedy algorithm
-    #optimal_subset = greedy(submod_func, X, k)
-    #print("Greedy algorithm completed.")
+    optimal_subset = greedy(submod_func, X, k)
+    print("Greedy algorithm completed.")
 
     # Method 2: Lazy greedy algorithm
-    #optimal_subset = lazy_greedy(submod_func, X, k)
-    #print("Lazy greedy algorithm completed.")
+    optimal_subset = lazy_greedy(submod_func, X, k)
+    print("Lazy greedy algorithm completed.")
 
     # Method 3: Stochastic greedy algorithm
     optimal_subset = stochastic_greedy(submod_func, X, k)
