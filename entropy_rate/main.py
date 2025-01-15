@@ -5,11 +5,12 @@ from submodular_maximizer import greedy, lazy_greedy, stochastic_greedy
 import numpy as np # type: ignore
 
 if __name__ == "__main__":
-    N = 10
+    N = 100
     d = 8
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
-    eigenfunction = lambda n, x: np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])
+    #eigenfunction = lambda n, x: np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])
+    eigenfunction = lambda n, x: np.prod([(1 + (n + 1) * np.pi * xi) for xi in x])
 
     P = MC_generation(N, d, state_vals, eigenvalues, eigenfunction)
     print(f"Generated multivariate reversible Markov chain with {d} dimensions.")
@@ -37,3 +38,16 @@ if __name__ == "__main__":
     print(f"Optimal subset: {optimal_subset}")
     print(f"Optimal matrix: {P_opt}")
     print(f"Optimal entropy rate: {opt_entropy_rate}")
+
+    # Test the submodular optimization algorithm
+    # Compare the entropy rates of the optimal subset and non-optimal subsets
+    '''
+    non_optimal_subsets = [
+        {i, i + 1} for i in range(d - 1)
+        if {i, i + 1} != optimal_subset
+    ]
+    entropy_rates = {tuple(S): compute_entropy_rate(keep_S_in_mat(P, state_vals, S)) for S in non_optimal_subsets}
+
+    entropy_rates[tuple(optimal_subset)] = opt_entropy_rate
+    print(f"Entropy rates of non-optimal subsets: {entropy_rates}")
+    '''

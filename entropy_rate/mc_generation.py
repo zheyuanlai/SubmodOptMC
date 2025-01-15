@@ -17,7 +17,8 @@ def MC_generation(N, d, state_vals, eigenvalues, eigenfunction):
     '''
     state_space = list(product(state_vals, repeat=d))
     state_space_size = len(state_space)
-    pi = np.ones(state_space_size) / state_space_size # set pi's to be uniform
+    #pi = np.ones(state_space_size) / state_space_size # set pi's to be uniform
+    pi = np.linspace(0.01, 1, state_space_size); pi = pi / pi.sum() # set pi's to be non-uniform
     P = np.zeros((state_space_size, state_space_size))
     for i, x in enumerate(state_space):
         for j, y in enumerate(state_space):
@@ -33,12 +34,13 @@ def compute_stationary_distribution(P):
 
 ### An example
 def eigenfunction(n, x):
-    return np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])
+    #return np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])
+    return np.prod([(1 + (n + 1) * np.pi * xi) for xi in x])
 
 if __name__ == "__main__":
-    N = 2
+    N = 3
     d = 2
     state_vals = [0, 1]
-    eigenvalues = [1, 0.5]
+    eigenvalues = [1, 0.5, 0.2]
     P = MC_generation(N, d, state_vals, eigenvalues, eigenfunction)
     print(P)
