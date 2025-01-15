@@ -6,7 +6,7 @@ import numpy as np # type: ignore
 
 if __name__ == "__main__":
     N = 10
-    d = 9
+    d = 8
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
     eigenfunction = lambda n, x: np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])
@@ -19,16 +19,17 @@ if __name__ == "__main__":
     k = 2
 
     # Method 1: Greedy algorithm
-    optimal_subset = greedy(submod_func, X, k)
-    print("Greedy algorithm completed.")
+    #optimal_subset = greedy(submod_func, X, k)
+    #print("Greedy algorithm completed.")
 
     # Method 2: Lazy greedy algorithm
     optimal_subset = lazy_greedy(submod_func, X, k)
     print("Lazy greedy algorithm completed.")
 
     # Method 3: Stochastic greedy algorithm
-    optimal_subset = stochastic_greedy(submod_func, X, k)
-    print("Stochastic greedy algorithm completed.")
+    # Note: This algorithm may not provide the optimal result when `d` is small.
+    #optimal_subset = stochastic_greedy(submod_func, X, k)
+    #print("Stochastic greedy algorithm completed.")
 
     P_opt = keep_S_in_mat(P, state_vals, optimal_subset)
     opt_entropy_rate = compute_entropy_rate(P_opt)
