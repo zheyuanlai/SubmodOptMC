@@ -1,4 +1,4 @@
-# Submodular optimization of the KL
+# Submodular optimization of KL divergence
 
 We use submodular minimization on the KL divergence between original transition probability matrix P and the outer product of keep-S-in and leave-S-out matrices, subject to a cardinality constraint.
 
