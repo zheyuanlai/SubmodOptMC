@@ -24,6 +24,6 @@ def KL_divergence(P, Q):
     for x in range(n):
         for y in range(n):
             if P[x, y] > 0 and Q[x, y] > 0:
-                kl_divergence += pi[x] * P[x, y] * np.log(P[x, y] / Q[x, y])
+                kl_div += pi[x] * P[x, y] * np.log(P[x, y] / Q[x, y])
     
-    return kl_divergence
+    return kl_div
