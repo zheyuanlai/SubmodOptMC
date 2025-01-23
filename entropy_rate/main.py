@@ -3,6 +3,7 @@ from keep_S_in import keep_S_in_mat
 from entropy_rate import compute_entropy_rate
 from submodular_maximizer import greedy, lazy_greedy, stochastic_greedy
 import numpy as np # type: ignore
+from itertools import combinations
 
 if __name__ == "__main__":
     N = 100
@@ -43,8 +44,8 @@ if __name__ == "__main__":
     # Compare the entropy rates of the optimal subset and non-optimal subsets
     
     non_optimal_subsets = [
-        {i, i + 1} for i in range(d - 1)
-        if {i, i + 1} != optimal_subset
+        set(combination) for combination in combinations(range(d), k)
+        if set(combination) != optimal_subset
     ]
     entropy_rates = {tuple(S): compute_entropy_rate(keep_S_in_mat(P, state_vals, S)) for S in non_optimal_subsets}
 

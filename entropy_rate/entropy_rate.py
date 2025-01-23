@@ -19,8 +19,3 @@ def compute_entropy_rate(P):
             if P_xy > 0:
                 entropy_rate -= pi_x * P_xy * np.log(P_xy)
     return entropy_rate
-
-# Example
-if __name__ == "__main__":
-    P = np.array([[0.5, 0.5], [0.25, 0.75]])
-    print(compute_entropy_rate(P))

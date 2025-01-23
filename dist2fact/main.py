@@ -5,6 +5,7 @@ from leave_S_out import leave_S_out_mat
 from outer_prod import compute_outer_product
 from kl_div import KL_divergence
 from submodular_minimizer import greedy
+from itertools import combinations
 
 def submodular_function(S, P, state_vals):
     '''
@@ -49,9 +50,12 @@ if __name__ == "__main__":
     print(f"Optimal KL divergence: {opt_kl_div}")
 
     non_optimal_subsets = [
-        {i, i + 1} for i in range(d - 1)
-        if {i, i + 1} != optimal_subset
+        set(combination) for combination in combinations(range(d), k)
+        if set(combination) != optimal_subset
     ]
-    kl_divs = {tuple(S): KL_divergence(P, compute_outer_product(keep_S_in_mat(P, state_vals, S), leave_S_out_mat(P, state_vals, S))) for S in non_optimal_subsets}
+    kl_divs = {
+        tuple(S): KL_divergence(P, compute_outer_product(keep_S_in_mat(P, state_vals, S), leave_S_out_mat(P, state_vals, S)))
+        for S in non_optimal_subsets
+    }
 
     print(f"Entropy rates of non-optimal subsets: {kl_divs}")
