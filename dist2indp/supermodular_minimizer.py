@@ -21,7 +21,7 @@ def submodular_greedy(f, X, k):
 
 def greedy(f, X, k):
     '''
-    Greedy algorithm for submodular minimization with cardinality constraints.
+    Greedy algorithm for supermodular minimization with cardinality constraints.
 
     Parameters:
         f (function): The supermodular function.
