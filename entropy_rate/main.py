@@ -60,6 +60,6 @@ if __name__ == "__main__":
         set(combination) for combination in combinations(range(d), k)
         if set(combination) != optimal_subset
     ]
-    entropy_rates = {tuple(S): compute_entropy_rate(keep_S_in_mat(P, state_vals, S)) for S in non_optimal_subsets}
+    entropy_rates = {tuple(S): submod_func(S) for S in non_optimal_subsets}
     print(f"Entropy rates of non-optimal subsets: {entropy_rates}")
     '''

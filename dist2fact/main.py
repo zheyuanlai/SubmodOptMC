@@ -70,7 +70,7 @@ if __name__ == "__main__":
         if set(combination) != optimal_subset
     ]
     kl_divs = {
-        tuple(S): KL_divergence(P, compute_outer_product(keep_S_in_mat(P, state_vals, S), leave_S_out_mat(P, state_vals, S)))
+        tuple(S): submod_func(S)
         for S in non_optimal_subsets
     }
 

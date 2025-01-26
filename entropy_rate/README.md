@@ -1,6 +1,6 @@
 # Submodularity optimization of the entropy rate
 
-We use submodularity maximization on entropy rate to find an optimal subset Markov chain with knapsack constraints.
+We use submodularity maximization on entropy rate to find an optimal subset Markov chain (with the largest entropy rate) with knapsack constraints.
 
 To perform numerical experiments, run the main script:
 ```
