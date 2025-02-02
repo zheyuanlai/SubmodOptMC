@@ -8,4 +8,4 @@ is submodular but generally not monotonically non-decreasing, so the greedy algo
 $$S \mapsto H(P^{(S)}) = H(\pi^{(S)} \boxtimes P^{(S)}) - H(\pi^{(S)}),$$
 which is a monotonically non-decreasing submodular function minus a modular function if we assume that $\pi$ is of product form, i.e. $\pi = \otimes_{i=1}^d \pi_i$, and we can use distorted greedy algorithm for this objective function.
 
-![Distorted Greedy Algorithm](../assets/distortedgreedy.png)
+![Distorted Greedy Algorithm](/assets/distgrdy.png)

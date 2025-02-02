@@ -1,5 +1,6 @@
 from mc_generation import MC_generation, compute_stationary_distribution
-from keep_S_in import keep_S_in_mat
+#from keep_S_in import keep_S_in_mat
+from leave_S_out import leave_S_out_mat
 from entropy_rate import compute_entropy_rate
 import numpy as np # type: ignore
 from itertools import combinations
@@ -21,8 +22,8 @@ if __name__ == "__main__":
     def supermod_func(S):
         res = 0
         for elem in S:
-            res += compute_entropy_rate(keep_S_in_mat(P, state_vals, {elem}))
-        res -= compute_entropy_rate(keep_S_in_mat(P, state_vals, S))
+            res += compute_entropy_rate(leave_S_out_mat(P, state_vals, {elem}))
+        res -= compute_entropy_rate(leave_S_out_mat(P, state_vals, S))
         return res
     
     X = set(range(d))

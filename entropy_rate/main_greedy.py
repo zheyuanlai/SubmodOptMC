@@ -18,7 +18,6 @@ if __name__ == "__main__":
         periodic_part = np.prod([1 + np.cos((n + 1) * np.pi * xi) for xi in x])
         return damping * periodic_part
 
-
     P = MC_generation(N, d, state_vals, eigenvalues, eigenfunction)
     print(f"Generated multivariate reversible Markov chain with {d} dimensions.")
 
@@ -55,11 +54,10 @@ if __name__ == "__main__":
 
     # Test the submodular optimization algorithm
     # Compare the entropy rates of the optimal subset and non-optimal subsets
-    '''
+    
     non_optimal_subsets = [
         set(combination) for combination in combinations(range(d), k)
         if set(combination) != optimal_subset
     ]
     entropy_rates = {tuple(S): submod_func(S) for S in non_optimal_subsets}
     print(f"Entropy rates of non-optimal subsets: {entropy_rates}")
-    '''
