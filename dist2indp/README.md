@@ -1,5 +1,4 @@
 # Supermodular optimization of distance to independence
 
-We use supermodular minimization on the distance to independence of a subset Markov chain, subject to a cardinality constraint.
-
-Minimizing a supermodular function $f$ is the same as maximizing a submodular function $-f$. Hence, we use the greedy algorithm for submodular maximization.
+The map $$S \mapsto \mathbb{I} (P^{(S)})$$ is monotonically non-decreasing and supermodular, so there does not exist near-optimal greedy algorithm for optimization, instead, we consider the following map
+$$S \mapsto \mathbb{I} (P^{(-S)}),$$ which is monotonically non-increasing and supermodular, therefore, a greedy minimization algorithm provides a near-optimal approximation.
