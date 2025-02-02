@@ -46,11 +46,11 @@ if __name__ == "__main__":
     print(f"Optimal entropy rate: {opt_entropy_rate}")
 
     # Visualization
-    steps = 50
-    original_path = simulate_path(P, state_vals, steps)
-    subset_indices = sorted(optimal_subset)
-    subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
-    plot_sample_paths(original_path, subset_path, list(optimal_subset))
+    #steps = 50
+    #original_path = simulate_path(P, state_vals, steps)
+    #subset_indices = sorted(optimal_subset)
+    #subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
+    #plot_sample_paths(original_path, subset_path, list(optimal_subset))
 
     # Test the submodular optimization algorithm
     # Compare the entropy rates of the optimal subset and non-optimal subsets
