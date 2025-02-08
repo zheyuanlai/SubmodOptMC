@@ -40,4 +40,5 @@ def plot_sample_paths(original_path, subset_path, subset_indices):
 
     axes[-1].set_xlabel("Steps")
     plt.tight_layout()
+    plt.savefig("sample_paths.png")
     plt.show()

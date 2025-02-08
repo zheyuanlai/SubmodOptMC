@@ -11,3 +11,10 @@ which is a monotonically non-decreasing submodular function minus a modular func
 ![Distorted Greedy Algorithm](/assets/distgrdy.png)
 
 The greedy approach is in `main_greedy.py`, and the distorted greedy approach is in `main_distorted_greedy.py`.
+
+The following is a visualization of optimization results, in which case we select the 3-dimensional subset Markov chain with the largest entropy rate out of a 8-dimensional Markov chain.
+
+![visualization](/assets/entropy_rate_simulation.png)
+
+# References
+* [1] Harshaw, C., Feldman, M., Ward, J., & Karbasi, A. (2019). Submodular maximization beyond non-negativity: Guarantees, fast algorithms, and applications. In International Conference on Machine Learning (pp. 2634-2643). PMLR.

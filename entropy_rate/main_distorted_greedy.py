@@ -7,7 +7,7 @@ from distorted_greedy import distorted_greedy
 
 if __name__ == "__main__":
     N = 100
-    d = 5
+    d = 9
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
     def eigenfunction(n, x, alpha=0.3):
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         return -compute_entropy_rate(pi_S)
     
     X = set(range(d))
-    m = 2
+    m = 3
 
     # Distorted Greedy Algorithm
     optimal_subset = distorted_greedy(submod_func, modular_func, X, m)
