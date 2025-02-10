@@ -1,13 +1,13 @@
 from mc_generation import MC_generation, compute_stationary_distribution
 from keep_S_in import keep_S_in_mat
-from entropy_rate import compute_entropy_rate
+from entropy_rate import compute_entropy_rate, compute_shannon_entropy, compute_joint_entropy
 import numpy as np # type: ignore
 from itertools import combinations
 from distorted_greedy import distorted_greedy
 
 if __name__ == "__main__":
     N = 100
-    d = 9
+    d = 8
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
     def eigenfunction(n, x, alpha=0.3):
@@ -15,19 +15,18 @@ if __name__ == "__main__":
         periodic_part = np.prod([1 + np.cos((n + 1) * np.pi * xi) for xi in x])
         return damping * periodic_part
 
-
     P = MC_generation(N, d, state_vals, eigenvalues, eigenfunction)
     print(f"Generated multivariate reversible Markov chain with {d} dimensions.")
 
     def submod_func(S):
         P_S = keep_S_in_mat(P, state_vals, S)
         pi_S = compute_stationary_distribution(P_S)
-        return -compute_entropy_rate(pi_S * P_S)
+        return compute_joint_entropy(pi_S[:, None] * P_S)
     
     def modular_func(S):
         P_S = keep_S_in_mat(P, state_vals, S)
         pi_S = compute_stationary_distribution(P_S)
-        return -compute_entropy_rate(pi_S)
+        return compute_shannon_entropy(pi_S)
     
     X = set(range(d))
     m = 3

@@ -25,7 +25,7 @@ if __name__ == "__main__":
         res = 0
         for elem in S:
             res += KL_divergence(P, compute_outer_product(keep_S_in_mat(P, state_vals, {elem}), leave_S_out_mat(P, state_vals, {elem})))
-        return -res
+        return res
 
     def g(S):
         P_S = keep_S_in_mat(P, state_vals, S)
@@ -43,11 +43,11 @@ if __name__ == "__main__":
     dist2fact = KL_divergence(P, compute_outer_product(P_opt, leave_S_out_mat(P, state_vals, optimal_subset)))
 
     # Visualization
-    steps = 50
-    original_path = simulate_path(P, state_vals, steps)
-    subset_indices = sorted(optimal_subset)
-    subset_path = simulate_path(keep_S_in_mat(P, state_vals, optimal_subset), state_vals, steps, initial_state=original_path[0, subset_indices])
-    plot_sample_paths(original_path, subset_path, list(optimal_subset))
+    #steps = 50
+    #original_path = simulate_path(P, state_vals, steps)
+    #subset_indices = sorted(optimal_subset)
+    #subset_path = simulate_path(keep_S_in_mat(P, state_vals, optimal_subset), state_vals, steps, initial_state=original_path[0, subset_indices])
+    #plot_sample_paths(original_path, subset_path, list(optimal_subset))
 
 
     print(f"Optimal subset: {optimal_subset}")
