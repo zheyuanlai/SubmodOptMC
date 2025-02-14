@@ -1,5 +1,5 @@
 import numpy as np # type: ignore
-from mc_generation import compute_stationary_distribution
+from mc_generation import stationary_distribution_reversible
 
 def compute_entropy_rate(P):
     """
@@ -7,7 +7,7 @@ def compute_entropy_rate(P):
     Supports both 2D Markov chain entropy rate and 1D Shannon entropy.
     """
     entropy_rate = 0.0
-    pi = compute_stationary_distribution(P)
+    pi = stationary_distribution_reversible(P)
     for i, pi_x in enumerate(pi):
         for j, P_xy in enumerate(P[i]):
             if P_xy > 0:

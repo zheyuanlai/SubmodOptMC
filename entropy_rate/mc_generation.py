@@ -32,6 +32,30 @@ def compute_stationary_distribution(P):
     stationary_distribution = stationary_vector / stationary_vector.sum()
     return stationary_distribution.flatten()
 
+def stationary_distribution_reversible(P):
+    """
+    Compute the stationary distribution of a reversible Markov chain.
+    
+    Parameters:
+    P : numpy array (n x n)
+        Transition probability matrix of the reversible Markov chain.
+        
+    Returns:
+    pi : numpy array (n,)
+        Stationary distribution.
+    """
+    n = P.shape[0]
+    
+    # Compute unnormalized stationary distribution using detailed balance
+    pi_unnormalized = np.ones(n)  # Initialize with 1
+    for i in range(1, n):
+        pi_unnormalized[i] = pi_unnormalized[i-1] * (P[i-1, i] / P[i, i-1])
+    
+    # Normalize the stationary distribution
+    pi = pi_unnormalized / np.sum(pi_unnormalized)
+    
+    return pi
+
 ### An example
 def eigenfunction(n, x):
     #return np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])

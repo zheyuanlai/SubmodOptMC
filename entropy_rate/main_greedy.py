@@ -1,4 +1,4 @@
-from mc_generation import MC_generation, compute_stationary_distribution
+from mc_generation import MC_generation
 from keep_S_in import keep_S_in_mat
 from entropy_rate import compute_entropy_rate
 from submodular_maximizer import greedy, lazy_greedy, stochastic_greedy
@@ -8,7 +8,7 @@ from visualization import simulate_path, plot_sample_paths
 
 if __name__ == "__main__":
     N = 100
-    d = 8
+    d = 10
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
     #eigenfunction = lambda n, x: np.prod([(1 + np.cos((n + 1) * np.pi * xi)) for xi in x])

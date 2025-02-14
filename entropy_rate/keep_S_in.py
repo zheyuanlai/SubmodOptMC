@@ -1,6 +1,6 @@
 import numpy as np  # type: ignore
 from itertools import product
-from mc_generation import compute_stationary_distribution, MC_generation
+from mc_generation import stationary_distribution_reversible, MC_generation
 
 def keep_S_in_mat(P, state_vals, S):
     '''
@@ -14,7 +14,7 @@ def keep_S_in_mat(P, state_vals, S):
     Returns:
         tuple: The marginal distribution pi_S and the keep-S-in matrix P_S.
     '''
-    pi = compute_stationary_distribution(P)
+    pi = stationary_distribution_reversible(P)
     d = int(np.log2(len(P)))
     state_space = list(product(state_vals, repeat=d))
     reduced_state_space = list(product(state_vals, repeat=len(S)))
@@ -48,7 +48,7 @@ def marginal_pi(S, P, state_space, reduced_state_space):
     Returns:
         ndarray: The marginal distribution pi_S over the reduced state space.
     '''
-    pi = compute_stationary_distribution(P)
+    pi = stationary_distribution_reversible(P)
     marg_dist = np.zeros(len(reduced_state_space))
     reduced_state_map = {state: idx for idx, state in enumerate(reduced_state_space)}
 
