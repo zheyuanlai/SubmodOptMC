@@ -171,41 +171,65 @@ def compute_shannon_entropy(P):
 def compute_joint_entropy(joint):
     return -torch.sum(joint * torch.log(joint + 1e-10))
 
-def distorted_greedy(f, c, U, m):
+# -----------------------
+# Submodular Maximizer (remains in pure Python/NumPy)
+# -----------------------
+def greedy(f, X, k):
     """
-    Implements the corrected Distorted Greedy algorithm.
-    (Caching of f and c evaluations could yield further speedups.)
+    Greedy algorithm for submodular maximization with cardinality constraints.
     """
     S = set()
-    for i in range(m):
-        max_gain = float('-inf')
-        best_e = None
-        for e in U - S:
-            gain = (1 - 1/m) ** (m - (i + 1)) * (f(S | {e}) - f(S)) - c({e})
-            if gain > max_gain:
-                max_gain = gain
-                best_e = e
-        # Only add if the computed gain is positive.
-        if best_e is not None and ((1 - 1/m) ** (m - (i + 1)) * (f(S | {best_e}) - f(S)) - c({best_e}) > 0):
-            S.add(best_e)
+    for _ in range(k):
+        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
+        gain, elem = max(gains)
+        S.add(elem)
     return S
 
+def lazy_greedy(f, X, k):
+    """
+    Lazy greedy algorithm for submodular maximization with cardinality constraints.
+    """
+    S = set()
+    gains = [(f(S.union({e})) - f(S), e) for e in X - S]
+    gain, elem = max(gains)
+    S.add(elem)
+    for _ in range(k - 1):
+        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
+        gain, elem = max(gains)
+        S.add(elem)
+    return S
+
+def stochastic_greedy(f, X, k, epsilon=0.1):
+    """
+    Stochastic greedy algorithm for submodular maximization with cardinality constraints.
+    """
+    S = set()
+    n = len(X)
+    s = int((n / k) * np.log(1 / epsilon))
+    for _ in range(k):
+        R = np.random.choice(list(X - S), size=min(s, len(X - S)), replace=False)
+        gains = [(f(S.union({e})) - f(S), e) for e in R]
+        total = sum(g for g, _ in gains)
+        probs = [g / total if total > 0 else 1/len(gains) for g, _ in gains]
+        elem = np.random.choice([e for _, e in gains], p=probs)
+        S.add(elem)
+    return S
+
+# -----------------------
+# Visualization (using NumPy & Matplotlib)
+# -----------------------
 def simulate_path(P, state_vals, steps, initial_state=None):
     """
-    Simulates a path from a Markov chain defined by transition matrix P.
-    (This part remains similar to your original code.)
+    Simulate a path from the Markov chain with transition matrix P.
+    P is a torch tensor (converted to CPU numpy array for simulation).
     """
     d = int(np.log2(P.shape[0]))
-    
     def state_to_index(state):
         return int("".join(map(str, state)), 2)
-    
     def index_to_state(index):
         return list(map(int, f"{index:0{d}b}"))
-    
     if initial_state is None:
         initial_state = np.random.choice(state_vals, size=d)
-    
     current_state = initial_state
     states = [current_state]
     P_cpu = P.cpu().numpy()
@@ -218,82 +242,74 @@ def simulate_path(P, state_vals, steps, initial_state=None):
     return np.array(states)
 
 def plot_sample_paths(original_path, subset_path, subset_indices):
+    """
+    Plot sample paths from the original Markov chain and the reduced (subset) chain.
+    """
     steps = original_path.shape[0]
     num_plots = len(subset_indices)
     fig, axes = plt.subplots(num_plots, 1, figsize=(10, 4 * num_plots), sharex=True)
-    
     if num_plots == 1:
         axes = [axes]
-    
     for i, idx in enumerate(subset_indices):
         axes[i].plot(range(steps), original_path[:, idx], label=f"Original MC (dim {idx})", linestyle="--")
         axes[i].plot(range(steps), subset_path[:, i], label=f"Subset MC (dim {i})", linestyle="-")
         axes[i].set_ylabel(f"State (dim {idx})")
         axes[i].legend()
-    
     axes[-1].set_xlabel("Steps")
     plt.tight_layout()
     plt.savefig("sample_paths.png")
     plt.show()
 
 # -----------------------
-# Main script
+# Main Script
 # -----------------------
-
 if __name__ == "__main__":
     # Parameters for the full Markov chain
     N = 100
-    d = 14
+    d = 10
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
     
-    # (The original eigenfunction is kept for reference but is not used now)
+    # Define a GPU-enabled eigenfunction.
+    # Note: This version expects a state x (a tuple or list) and returns a torch scalar.
     def eigenfunction(n, x, alpha=0.3):
         xt = torch.tensor(x, dtype=torch.float32, device=device)
         damping = torch.exp(-alpha * torch.sum(xt**2))
-        periodic = torch.prod(1 + torch.cos((n + 1) * torch.pi * xt))
-        return damping * periodic
+        periodic_part = torch.prod(1 + torch.cos((n + 1) * torch.pi * xt))
+        return damping * periodic_part
 
-    # Generate the full Markov chain transition matrix on the device.
+    # Generate the full transition matrix P on the GPU.
     P = MC_generation(N, d, state_vals, eigenvalues)
     print(f"Generated multivariate reversible Markov chain with {d} dimensions.")
     
-    # Define the submodular function f and modular cost function c.
-    def submod_func(S):
-        P_S = keep_S_in_mat(P, state_vals, S)
-        pi_S = compute_stationary_distribution(P_S)
-        return compute_joint_entropy(pi_S[:, None] * P_S)
-    
-    def modular_func(S):
-        P_S = keep_S_in_mat(P, state_vals, S)
-        pi_S = compute_stationary_distribution(P_S)
-        return compute_shannon_entropy(pi_S)
-    
+    # Define the submodular function.
+    # We wrap the entropy rate computation so that it returns a Python float.
+    submod_func = lambda S: compute_entropy_rate(keep_S_in_mat(P, state_vals, S)).item()
     X = set(range(d))
-    m = 4
+    k = 3
+
+    # Select a subset via lazy greedy (you can also try greedy or stochastic_greedy).
+    optimal_subset = lazy_greedy(submod_func, X, k)
+    print("Lazy greedy algorithm completed.")
     
-    # Run the Distorted Greedy algorithm to select a subset.
-    optimal_subset = distorted_greedy(submod_func, modular_func, X, m)
-    print("Distorted greedy algorithm completed.")
-    
-    # Compute the entropy rate of the chain defined on the optimal subset.
+    # Compute the reduced transition matrix and its entropy rate.
     P_opt = keep_S_in_mat(P, state_vals, optimal_subset)
-    opt_entropy_rate = compute_entropy_rate(P_opt)
+    opt_entropy_rate = compute_entropy_rate(P_opt).item()
     
     print(f"Optimal subset: {optimal_subset}")
-    print(f"Optimal matrix (P_opt):\n{P_opt.cpu().numpy()}")
-    print(f"Optimal entropy rate: {opt_entropy_rate.item()}")
-
-    #steps = 50
-    #original_path = simulate_path(P, state_vals, steps)
-    #subset_indices = sorted(optimal_subset)
-    #subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
-    #plot_sample_paths(original_path, subset_path, list(optimal_subset))
+    print(f"Optimal matrix:\n{P_opt.cpu().numpy()}")
+    print(f"Optimal entropy rate: {opt_entropy_rate}")
     
-    # Compute and print entropy rates for all non-optimal subsets of size m.
-    non_optimal_subsets = [set(comb) for comb in combinations(range(d), m) if set(comb) != optimal_subset]
-    entropy_rates = {}
-    for S in non_optimal_subsets:
-        entropy = compute_entropy_rate(keep_S_in_mat(P, state_vals, S))
-        entropy_rates[tuple(sorted(S))] = entropy.item()
+    # -----------------------
+    # Visualization
+    # -----------------------
+    steps = 50
+    original_path = simulate_path(P, state_vals, steps)
+    subset_indices = sorted(optimal_subset)
+    subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
+    plot_sample_paths(original_path, subset_path, list(optimal_subset))
+    
+    # Compare entropy rates for non-optimal subsets
+    non_optimal_subsets = [set(comb) for comb in combinations(range(d), k) if set(comb) != optimal_subset]
+    entropy_rates = {tuple(S): submod_func(S) for S in non_optimal_subsets}
     print(f"Entropy rates of non-optimal subsets: {entropy_rates}")

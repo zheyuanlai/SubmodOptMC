@@ -12,9 +12,16 @@ which is a monotonically non-decreasing submodular function minus a modular func
 
 The greedy approach is in `main_greedy.py`, and the distorted greedy approach is in `main_distorted_greedy.py`.
 
-The following is a visualization of optimization results, in which case we select the 3-dimensional subset Markov chain with the largest entropy rate out of a 8-dimensional Markov chain.
+The following is the visualization of greedy algorithm, in which case we aim to choose a subset Markov chain with at most 4 dimensions out of a 15-dimensional Markov chain.
 
-![visualization](/assets/entropy_rate_simulation.png)
+![visualization](/assets/sample_paths_grdy_entropy.png)
+
+The following is the visualization of distorted greedy algorithm, in which case we aim to choose a subset Markov chain with at most 4 dimensions out of a 15-dimensional Markov chain.
+
+![visualization](/assets/sample_paths_dist_grdy_entropy.png)
+
+It turns out that in small dimensional cases, although distorted greedy algorithm has an approximation guarantee, it does not necessarily yields the optimal results, since 
+$$g(S_m) - c(S_m) \geq (1 - e^{-1}) g(\mathrm{OPT}) - c(\mathrm{OPT}).$$
 
 # References
 * [1] Harshaw, C., Feldman, M., Ward, J., & Karbasi, A. (2019). Submodular maximization beyond non-negativity: Guarantees, fast algorithms, and applications. In International Conference on Machine Learning (pp. 2634-2643). PMLR.
