@@ -10,18 +10,21 @@ which is a monotonically non-decreasing submodular function minus a modular func
 
 ![Distorted Greedy Algorithm](/assets/distgrdy.png)
 
-The greedy approach is in `main_greedy.py`, and the distorted greedy approach is in `main_distorted_greedy.py`.
+We consider the following approaches:
+* Approach 1: Heuristic greedy algorithm, see `main_approach_1.py` and `main_approach_1_gpu.py`.
+* Approach 2: Distorted greedy algorithm, requiring $\pi$ to be of product form, see `main_approach_2.py` and `main_approach_2_gpu.py`.
+* Approach 3: Distorted greedy algorithm, choose $\beta = 0$, see `main_approach_3_gpu.py`.
 
-The following is the visualization of greedy algorithm, in which case we aim to choose a subset Markov chain with at most 4 dimensions out of a 15-dimensional Markov chain.
+The following is the visualization these algorithms, in which case we aim to choose a subset Markov chain with at most 4 dimensions out of a 15-dimensional Markov chain.
 
-![visualization](/assets/sample_paths_grdy_entropy.png)
+**Approach 1**
+![visualization](/assets/sample_paths_entropyrate_1.png)
 
-The following is the visualization of distorted greedy algorithm, in which case we aim to choose a subset Markov chain with at most 4 dimensions out of a 15-dimensional Markov chain.
+**Approach 2**
+![visualization](/assets/sample_paths_entropyrate_2.png)
 
-![visualization](/assets/sample_paths_dist_grdy_entropy.png)
-
-It turns out that in small dimensional cases, although distorted greedy algorithm has an approximation guarantee, it does not necessarily yields the optimal results, since 
-$$g(S_m) - c(S_m) \geq (1 - e^{-1}) g(\mathrm{OPT}) - c(\mathrm{OPT}).$$
+**Approach 3**
+![visualization](/assets/sample_paths_entropyrate_3.png)
 
 # References
 * [1] Harshaw, C., Feldman, M., Ward, J., & Karbasi, A. (2019). Submodular maximization beyond non-negativity: Guarantees, fast algorithms, and applications. In International Conference on Machine Learning (pp. 2634-2643). PMLR.
