@@ -179,11 +179,14 @@ def greedy(f, X, k):
     Greedy algorithm for submodular maximization with cardinality constraints.
     """
     S = set()
+    plot_vals = []
     for _ in range(k):
         gains = [(f(S.union({e})) - f(S), e) for e in X - S]
         gain, elem = max(gains)
         S.add(elem)
-    return S
+        print(f"Added element {elem}")
+        plot_vals.append(f(S))
+    return plot_vals
 
 def lazy_greedy(f, X, k):
     """
@@ -214,6 +217,20 @@ def stochastic_greedy(f, X, k, epsilon=0.1):
         elem = np.random.choice([e for _, e in gains], p=probs)
         S.add(elem)
     return S
+
+def plot_objective_per_iteration(f_values):
+    """
+    Plots the function value f(S) after each iteration k = 0..m.
+    f_values is a list of length (m+1).
+    """
+    iters = range(1, len(f_values) + 1)
+    plt.figure(figsize=(6,4))
+    plt.plot(iters, f_values, marker='o')
+    plt.title("Optimal Entropy Rate vs. Subset Size")
+    plt.xlabel("Subset Size")
+    plt.ylabel("Optimal Entropy Rate")
+    plt.grid(True)
+    plt.show()
 
 # -----------------------
 # Visualization (using NumPy & Matplotlib)
@@ -266,7 +283,7 @@ def plot_sample_paths(original_path, subset_path, subset_indices):
 if __name__ == "__main__":
     # Parameters for the full Markov chain
     N = 100
-    d = 10
+    d = 5
     state_vals = [0, 1]
     eigenvalues = [1 / (n + 1) for n in range(N)]
     
@@ -286,30 +303,33 @@ if __name__ == "__main__":
     # We wrap the entropy rate computation so that it returns a Python float.
     submod_func = lambda S: compute_entropy_rate(keep_S_in_mat(P, state_vals, S)).item()
     X = set(range(d))
-    k = 3
+    m = d
 
     # Select a subset via lazy greedy (you can also try greedy or stochastic_greedy).
-    optimal_subset = lazy_greedy(submod_func, X, k)
-    print("Lazy greedy algorithm completed.")
+    #optimal_subset = lazy_greedy(submod_func, X, m)
+    #print("Lazy greedy algorithm completed.")
     
     # Compute the reduced transition matrix and its entropy rate.
-    P_opt = keep_S_in_mat(P, state_vals, optimal_subset)
-    opt_entropy_rate = compute_entropy_rate(P_opt).item()
+    #P_opt = keep_S_in_mat(P, state_vals, optimal_subset)
+    #opt_entropy_rate = compute_entropy_rate(P_opt).item()
     
-    print(f"Optimal subset: {optimal_subset}")
-    print(f"Optimal matrix:\n{P_opt.cpu().numpy()}")
-    print(f"Optimal entropy rate: {opt_entropy_rate}")
+    #print(f"Optimal subset: {optimal_subset}")
+    #print(f"Optimal matrix:\n{P_opt.cpu().numpy()}")
+    #print(f"Optimal entropy rate: {opt_entropy_rate}")
+    function_values = []
+    function_values = greedy(submod_func, X, m)
+    plot_objective_per_iteration(function_values)
     
     # -----------------------
     # Visualization
     # -----------------------
-    steps = 50
-    original_path = simulate_path(P, state_vals, steps)
-    subset_indices = sorted(optimal_subset)
-    subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
-    plot_sample_paths(original_path, subset_path, list(optimal_subset))
+    #steps = 50
+    #original_path = simulate_path(P, state_vals, steps)
+    #subset_indices = sorted(optimal_subset)
+    #subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
+    #plot_sample_paths(original_path, subset_path, list(optimal_subset))
     
     # Compare entropy rates for non-optimal subsets
-    non_optimal_subsets = [set(comb) for comb in combinations(range(d), k) if set(comb) != optimal_subset]
-    entropy_rates = {tuple(S): submod_func(S) for S in non_optimal_subsets}
-    print(f"Entropy rates of non-optimal subsets: {entropy_rates}")
+    #non_optimal_subsets = [set(comb) for comb in combinations(range(d), k) if set(comb) != optimal_subset]
+    #entropy_rates = {tuple(S): submod_func(S) for S in non_optimal_subsets}
+    #print(f"Entropy rates of non-optimal subsets: {entropy_rates}")

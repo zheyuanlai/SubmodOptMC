@@ -173,6 +173,7 @@ def distorted_greedy(f, c, U, m):
     (Caching of f and c evaluations could yield further speedups.)
     """
     S = set()
+    plot_res = []
     for i in range(m):
         max_gain = float('-inf')
         best_e = None
@@ -183,7 +184,9 @@ def distorted_greedy(f, c, U, m):
                 best_e = e
         if best_e is not None and ((1 - 1/m) ** (m - (i + 1)) * (f(S | {best_e}) - f(S)) - c({best_e}) > 0):
             S.add(best_e)
-    return S
+        print(f"Subset size {i+1}: {S}")
+        plot_res.append(compute_entropy_rate(keep_S_in_mat(P, state_vals, S)))
+    return plot_res
 
 def simulate_path(P, state_vals, steps, initial_state=None):
     """
@@ -231,11 +234,26 @@ def plot_sample_paths(original_path, subset_path, subset_indices):
     plt.savefig("sample_paths.png")
     plt.show()
 
+def plot_objective_per_iteration(f_values):
+    """
+    Plots the function value f(S) after each iteration k = 0..m.
+    f_values is a list of length (m+1).
+    """
+    iters = range(1, len(f_values) + 1)
+    plt.figure(figsize=(6,4))
+    plt.plot(iters, f_values, marker='o')
+    plt.title("Optimal Entropy Rate vs. Subset Size")
+    plt.xlabel("Subset Size")
+    plt.ylabel("Optimal Entropy Rate")
+    plt.grid(True)
+    plt.show()
+
 # -----------------------
 # Main script
 # -----------------------
 
 if __name__ == "__main__":
+    '''
     N = 100
     d = 5
     state_vals = [0, 1]
@@ -286,3 +304,32 @@ if __name__ == "__main__":
         entropy = compute_entropy_rate(keep_S_in_mat(P, state_vals, S))
         entropy_rates[tuple(sorted(S))] = entropy.item()
     print(f"Entropy rates of non-optimal subsets: {entropy_rates}")
+    '''
+    N = 100
+    d = 5
+    state_vals = [0, 1]
+    eigenvalues = [1 / (n + 1) for n in range(N)]
+    
+    def eigenfunction(n, x, alpha=0.3):
+        xt = torch.tensor(x, dtype=torch.float32, device=device)
+        damping = torch.exp(-alpha * torch.sum(xt**2))
+        periodic = torch.prod(1 + torch.cos((n + 1) * torch.pi * xt))
+        return damping * periodic
+
+    P = MC_generation(N, d, state_vals, eigenvalues)
+    print(f"Generated multivariate reversible Markov chain with {d} dimensions.")
+    
+    # choose \beta = 0
+    def modular_func(S):
+        sum = 0
+        for elem in S:
+            sum += compute_entropy_rate(leave_S_out_mat(P, state_vals, {elem})) - compute_entropy_rate(P)
+        return sum
+    
+    def submod_func(S):
+        return compute_entropy_rate(keep_S_in_mat(P, state_vals, S)) + modular_func(S)
+        
+    X = set(range(d))
+    function_values = []
+    function_values = distorted_greedy(submod_func, modular_func, X, m=d)
+    plot_objective_per_iteration([f.item() for f in function_values])
