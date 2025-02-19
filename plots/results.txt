@@ -1,38 +1,126 @@
-Greedy:
-Using CUDA device
-Generated multivariate reversible Markov chain with 15 dimensions.
-Added element 2
-Added element 3
-Added element 4
-Added element 5
-Added element 1
-Added element 6
-Added element 7
-Added element 8
-Added element 9
-Added element 10
-Added element 11
-Added element 12
-Added element 13
-Added element 14
-Added element 0
+Heuristic Greedy (N = 3, d = 15)
+Generated Bernoulli–Laplace chain with dimension d=15. #states=680
+Entropy rate of the full chain = 3.9944279193878174
+Iteration 1, S = {1}
+Iteration 2, S = {1, 3}
+Iteration 3, S = {1, 3, 4}
+Iteration 4, S = {1, 3, 4, 5}
+Iteration 5, S = {1, 3, 4, 5, 6}
+Iteration 6, S = {1, 3, 4, 5, 6, 7}
+Iteration 7, S = {1, 2, 3, 4, 5, 6, 7}
+Iteration 8, S = {1, 2, 3, 4, 5, 6, 7, 8}
+Iteration 9, S = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+Iteration 10, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+Iteration 11, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+[0.5304027795791626, 1.0413455963134766, 1.5302308797836304, 1.993862271308899, 2.4281084537506104, 2.827843189239502, 3.1904401779174805, 3.513949394226074, 3.7882702350616455, 4.005624771118164, 4.156752586364746, 4.228015899658203, 4.228015899658203, 4.228015899658203, 4.228015899658203]
 
 
-Distorted Greedy:
+Distorted Greedy (N = 3, d = 15)
+Generated Bernoulli–Laplace chain with dimension d=15. #states=680
+Entropy rate of the full chain = 3.9944279193878174
+Iteration 1, S = {1}
+Iteration 2, S = {1, 3}
+Iteration 3, S = {1, 3, 4}
+Iteration 4, S = {1, 3, 4, 5}
+Iteration 5, S = {1, 3, 4, 5, 6}
+Iteration 6, S = {1, 3, 4, 5, 6, 7}
+Iteration 7, S = {1, 2, 3, 4, 5, 6, 7}
+Iteration 8, S = {1, 2, 3, 4, 5, 6, 7, 8}
+Iteration 9, S = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+Iteration 10, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+Iteration 11, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+[0.5304027795791626, 1.0413455963134766, 1.5302308797836304, 1.993862271308899, 2.4281084537506104, 2.827843189239502, 3.1904401779174805, 3.513949394226074, 3.7882702350616455, 4.005624771118164, 4.156752586364746, 4.228015899658203, 4.228015899658203, 4.228015899658203, 4.228015899658203]
+
+Heuristic Greedy (N = 2, d = 20)
+Using CPU device
+Generated Bernoulli–Laplace chain with dimension d=20. #states=210
+Entropy rate of the full chain = 3.1811399459838867
+Iteration 1, S = {4}
+Iteration 2, S = {3, 4}
+Iteration 3, S = {3, 4, 5}
+Iteration 4, S = {3, 4, 5, 6}
+Iteration 5, S = {3, 4, 5, 6, 7}
+Iteration 6, S = {3, 4, 5, 6, 7, 8}
+Iteration 7, S = {2, 3, 4, 5, 6, 7, 8}
+Iteration 8, S = {2, 3, 4, 5, 6, 7, 8, 9}
+Iteration 9, S = {2, 3, 4, 5, 6, 7, 8, 9, 10}
+Iteration 10, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+Iteration 11, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
+Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+Iteration 16, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
+Iteration 17, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+Iteration 18, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+Iteration 19, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+Iteration 20, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+f-values: [0.3147468864917755, 0.6196120977401733, 0.91424161195755, 1.1969841718673706, 1.4664602279663086, 1.7212474346160889, 1.9631783962249756, 2.189082622528076, 2.397233247756958, 2.5861852169036865, 2.754456043243408, 2.90327525138855, 3.0341403484344482, 3.1417174339294434, 3.224527359008789, 3.280622959136963, 3.306022882461548, 3.306022882461548, 3.306022882461548, 3.306022882461548]
+
+Distorted Greedy (N = 2, d = 20)
+Using CPU device
+Generated Bernoulli–Laplace chain with dimension d=20. #states=210
+Entropy rate of the full chain = 3.1811399459838867
+Iteration 1, S = {4}
+Iteration 2, S = {3, 4}
+Iteration 3, S = {3, 4, 5}
+Iteration 4, S = {3, 4, 5, 6}
+Iteration 5, S = {3, 4, 5, 6, 7}
+Iteration 6, S = {3, 4, 5, 6, 7, 8}
+Iteration 7, S = {2, 3, 4, 5, 6, 7, 8}
+Iteration 8, S = {2, 3, 4, 5, 6, 7, 8, 9}
+Iteration 9, S = {2, 3, 4, 5, 6, 7, 8, 9, 10}
+Iteration 10, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+Iteration 11, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
+Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+Iteration 16, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
+Iteration 17, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+Iteration 18, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+Iteration 19, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+Iteration 20, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+f-values: [0.3147468864917755, 0.6196120977401733, 0.91424161195755, 1.1969841718673706, 1.4664602279663086, 1.7212474346160889, 1.9631783962249756, 2.189082622528076, 2.397233247756958, 2.5861852169036865, 2.754456043243408, 2.90327525138855, 3.0341403484344482, 3.1417174339294434, 3.224527359008789, 3.280622959136963, 3.306022882461548, 3.306022882461548, 3.306022882461548, 3.306022882461548]
+
+Heuristic Greedy (N = 2, d = 40)
 Using CUDA device
-Generated multivariate reversible Markov chain with 15 dimensions.
-Subset size 1: {3}
-Subset size 2: {2, 3}
-Subset size 3: {2, 3, 4}
-Subset size 4: {2, 3, 4, 5}
-Subset size 5: {2, 3, 4, 5, 6}
-Subset size 6: {2, 3, 4, 5, 6, 7}
-Subset size 7: {2, 3, 4, 5, 6, 7, 8}
-Subset size 8: {2, 3, 4, 5, 6, 7, 8, 9}
-Subset size 9: {2, 3, 4, 5, 6, 7, 8, 9, 10}
-Subset size 10: {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
-Subset size 11: {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Subset size 12: {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
-Subset size 13: {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
-Subset size 14: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
-Subset size 15: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
+Generated Bernoulli–Laplace chain with dimension d=40. #states=820
+Entropy rate of the full chain = 4.082370281219482
+Iteration 1, S = {6}
+Iteration 2, S = {6, 7}
+Iteration 3, S = {8, 6, 7}
+Iteration 4, S = {8, 9, 6, 7}
+Iteration 5, S = {5, 6, 7, 8, 9}
+Iteration 6, S = {5, 6, 7, 8, 9, 10}
+Iteration 7, S = {5, 6, 7, 8, 9, 10, 11}
+Iteration 8, S = {5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 9, S = {4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 10, S = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+f-values: [0.18875521421432495, 0.3751726746559143, 0.5590423345565796, 0.7401516437530518, 0.9184885025024414, 1.093918800354004, 1.2661001682281494, 1.434817910194397, 1.6000617742538452, 1.761986255645752]
+
+Distorted Greedy (N = 2, d = 40)
+Using CUDA device
+Generated Bernoulli–Laplace chain with dimension d=40. #states=820
+Entropy rate of the full chain = 4.082370281219482
+Iteration 1, S = {6}
+Iteration 2, S = {6, 7}
+Iteration 3, S = {8, 6, 7}
+Iteration 4, S = {8, 9, 6, 7}
+Iteration 5, S = {5, 6, 7, 8, 9}
+Iteration 6, S = {5, 6, 7, 8, 9, 10}
+Iteration 7, S = {5, 6, 7, 8, 9, 10, 11}
+Iteration 8, S = {5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 9, S = {4, 5, 6, 7, 8, 9, 10, 11, 12}
+Iteration 10, S = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+
+Distorted Greedy finished. Subset chosen = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+f-values: [0.18875521421432495, 0.3751726746559143, 0.5590423345565796, 0.7401516437530518, 0.9184885621070862, 1.093918800354004, 1.2661001682281494, 1.434817910194397, 1.6000617742538452, 1.761986255645752]

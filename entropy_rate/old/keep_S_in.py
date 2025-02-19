@@ -1,6 +1,6 @@
 import numpy as np  # type: ignore
 from itertools import product
-from mc_generation import stationary_distribution_reversible, MC_generation
+from entropy_rate.old.mc_generation import stationary_distribution_reversible, MC_generation
 
 def keep_S_in_mat(P, state_vals, S):
     '''

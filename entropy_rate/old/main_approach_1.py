@@ -1,4 +1,4 @@
-from mc_generation import MC_generation
+from entropy_rate.old.mc_generation import MC_generation
 from keep_S_in import keep_S_in_mat
 from entropy_rate import compute_entropy_rate
 from submodular_maximizer import greedy, lazy_greedy, stochastic_greedy
@@ -26,12 +26,12 @@ if __name__ == "__main__":
     k = 5
 
     # Method 1: Greedy algorithm
-    #optimal_subset = greedy(submod_func, X, k)
-    #print("Greedy algorithm completed.")
+    optimal_subset = greedy(submod_func, X, k)
+    print("Greedy algorithm completed.")
 
     # Method 2: Lazy greedy algorithm
-    optimal_subset = lazy_greedy(submod_func, X, k)
-    print("Lazy greedy algorithm completed.")
+    #optimal_subset = lazy_greedy(submod_func, X, k)
+    #print("Lazy greedy algorithm completed.")
 
     # Method 3: Stochastic greedy algorithm
     # Note: This algorithm may not provide the optimal result when `d` is small.

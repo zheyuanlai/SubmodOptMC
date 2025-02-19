@@ -156,22 +156,11 @@ def compute_outer_product_gpu(A, B):
 
 def distorted_greedy(f, c, U, m):
     """
-    Implements the corrected distorted greedy algorithm.
-    
-    Parameters:
-      f : function
-          A monotonic non-decreasing submodular function.
-      c : function
-          A modular cost function.
-      U : set
-          The ground set of elements.
-      m : int
-          The cardinality constraint.
-    
-    Returns:
-      set: The selected subset.
+    Implements the corrected Distorted Greedy algorithm.
+    (Caching of f and c evaluations could yield further speedups.)
     """
     S = set()
+    plot_res = []
     for i in range(m):
         max_gain = float('-inf')
         best_e = None
@@ -182,7 +171,9 @@ def distorted_greedy(f, c, U, m):
                 best_e = e
         if best_e is not None and ((1 - 1/m) ** (m - (i + 1)) * (f(S | {best_e}) - f(S)) - c({best_e}) > 0):
             S.add(best_e)
-    return S
+        print(f"Subset size {i+1}: {S}")
+        plot_res.append(compute_entropy_rate(keep_S_in_mat(P, state_vals, S)))
+    return plot_res
 
 # -----------------------
 # VISUALIZATION FUNCTIONS
@@ -230,6 +221,22 @@ def plot_sample_paths(original_path, subset_path, subset_indices):
     plt.savefig("sample_paths.png")
     plt.show()
 
+
+def plot_objective_per_iteration(f_values):
+    """
+    Plots the function value f(S) after each iteration k = 0..m.
+    f_values is a list of length (m+1).
+    """
+    iters = range(1, len(f_values) + 1)
+    plt.figure(figsize=(6,4))
+    plt.plot(iters, f_values, marker='o')
+    plt.title("Distance to Factorizability vs. Subset Size")
+    plt.xlabel("Subset Size")
+    plt.ylabel("Distance to Factorizability")
+    plt.grid(True)
+    plt.show()
+
+
 # -----------------------
 # MAIN SCRIPT
 # -----------------------
@@ -269,17 +276,20 @@ if __name__ == "__main__":
         return KL_divergence_gpu(P, outer_mat).item() + c(S)
     
     X = set(range(d))
-    m = 2
+    m = d
+
+    fvals = distorted_greedy(g, c, X, m)
+    plot_objective_per_iteration([f.item() for f in fvals])
 
     # Run the distorted greedy algorithm.
-    optimal_subset = distorted_greedy(g, c, X, m)
-    print("Distorted greedy algorithm completed.")
+    #optimal_subset = distorted_greedy(g, c, X, m)
+    #print("Distorted greedy algorithm completed.")
     
     # Compute the reduced transition matrix for the optimal subset.
-    P_opt = keep_S_in_mat(P, state_vals, optimal_subset)
-    P_minus_opt = leave_S_out_mat(P, state_vals, optimal_subset)
-    outer_mat = compute_outer_product_gpu(P_opt, P_minus_opt)
-    dist2fact = KL_divergence_gpu(P, outer_mat).item()
+    #P_opt = keep_S_in_mat(P, state_vals, optimal_subset)
+    #P_minus_opt = leave_S_out_mat(P, state_vals, optimal_subset)
+    #outer_mat = compute_outer_product_gpu(P_opt, P_minus_opt)
+    #dist2fact = KL_divergence_gpu(P, outer_mat).item()
     
     # Visualization: simulate paths for full and reduced chains.
     #steps = 50
@@ -288,17 +298,17 @@ if __name__ == "__main__":
     #subset_path = simulate_path(P_opt, state_vals, steps, initial_state=original_path[0, subset_indices])
     #plot_sample_paths(original_path, subset_path, list(optimal_subset))
     
-    print(f"Optimal subset: {optimal_subset}")
-    print(f"Optimal matrix (P_S):\n{P_opt.cpu().numpy()}")
-    print(f"Distance to factorizability: {dist2fact}")
+    #print(f"Optimal subset: {optimal_subset}")
+    #print(f"Optimal matrix (P_S):\n{P_opt.cpu().numpy()}")
+    #print(f"Distance to factorizability: {dist2fact}")
     
     # Compute distances for non-optimal subsets.
-    non_optimal_subsets = [set(comb) for comb in combinations(range(d), m) if set(comb) != optimal_subset]
-    dist2facts = {tuple(S): KL_divergence_gpu(
-                    P,
-                    compute_outer_product_gpu(
-                        keep_S_in_mat(P, state_vals, S),
-                        leave_S_out_mat(P, state_vals, S)
-                    )
-                  ).item() for S in non_optimal_subsets}
-    print(f"Distances to factorizability of non-optimal subsets: {dist2facts}")
+    #non_optimal_subsets = [set(comb) for comb in combinations(range(d), m) if set(comb) != optimal_subset]
+    #dist2facts = {tuple(S): KL_divergence_gpu(
+    #                P,
+    #                compute_outer_product_gpu(
+    #                    keep_S_in_mat(P, state_vals, S),
+    #                    leave_S_out_mat(P, state_vals, S)
+    #                )
+    #              ).item() for S in non_optimal_subsets}
+    #print(f"Distances to factorizability of non-optimal subsets: {dist2facts}")

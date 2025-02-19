@@ -1,4 +1,4 @@
-from mc_generation import MC_generation, stationary_distribution_reversible
+from entropy_rate.old.mc_generation import MC_generation, stationary_distribution_reversible
 from keep_S_in import keep_S_in_mat
 from entropy_rate import compute_entropy_rate, compute_shannon_entropy, compute_joint_entropy
 import numpy as np # type: ignore

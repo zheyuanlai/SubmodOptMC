@@ -287,33 +287,22 @@ def compute_entropy_rate(P, pi):
     return val.float()
 
 # -----------------------------------------------------------------------
-#  Distorted Greedy
+#  Greedy
 # -----------------------------------------------------------------------
-def distorted_greedy(f, c, U, m):
+def greedy(f, X, k):
     """
-    Distorted greedy with the set function f, cost c, ground set U.
+    Greedy algorithm for submodular maximization with cardinality constraints.
     """
     S = set()
-    results = []
-    for i in range(m):
-        best_gain = float('-inf')
-        best_e    = None
-        for e in (U - S):
-            gain = ((1 - 1/m)**(m - (i+1))) * (f(S | {e}) - f(S)) - c({e})
-            if gain>best_gain:
-                best_gain = gain
-                best_e    = e
-        
-        # Optionally only add if gain>0
-        if best_e is not None:
-            check_gain = ((1 - 1/m)**(m - (i+1))) * (f(S|{best_e})- f(S)) - c({best_e})
-            if check_gain>0:
-                S.add(best_e)
-
+    plot_vals = []
+    for i in range(k):
+        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
+        gain, elem = max(gains)
+        if gain >= 0: S.add(elem)
         print(f"Iteration {i+1}, S = {S}")
-        # track f(S) for plotting
-        results.append( f(S) - c(S))
-    return S, results
+        plot_vals.append(f(S))
+    return plot_vals
+
 
 def plot_objective_per_iteration(f_values):
     """
@@ -322,9 +311,9 @@ def plot_objective_per_iteration(f_values):
     iters = range(1, len(f_values)+1)
     plt.figure(figsize=(6,4))
     plt.plot(iters, f_values, marker='o')
-    plt.title("Entropy rate of output of distorted greedy against subset size")
-    plt.xlabel("Entropy rate")
-    plt.ylabel("Subset size")
+    plt.title("Entropy rate of the output of greedy algorithm against subset size")
+    plt.xlabel("Subset size")
+    plt.ylabel("Entropy rate")
     plt.grid(True)
     plt.show()
 
@@ -346,24 +335,14 @@ if __name__=="__main__":
     base_entropy = compute_entropy_rate(P, pi).item()
     print(f"Entropy rate of the full chain = {base_entropy}")
 
-    # Example "modular_func": sum_{elem in S} [ H(leaveOut(elem)) - H(full) ]
-    def modular_func(S):
-        val = 0.0
-        for e in S:
-            _, pi_minus, P_minus = leave_S_out_mat(P, state_space, pi, {e})
-            val += compute_entropy_rate(P_minus, pi_minus).item() - base_entropy
-        return val
-
-    # Example "submod_func": f(S) = H( keep_S_in_mat(...) ) + modular_func(S)
     def submod_func(S):
         _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
-        return compute_entropy_rate(PS, piS).item() + modular_func(S)
+        return compute_entropy_rate(PS, piS).item()
 
     # Distorted Greedy
     U = set(range(d))
-    chosen_subset, f_values = distorted_greedy(submod_func, modular_func, U, m=d)
+    f_values = greedy(submod_func, U, d)
 
-    print(f"\nDistorted Greedy finished. Subset chosen = {chosen_subset}")
     print("f-values:", f_values)
 
     # Plot

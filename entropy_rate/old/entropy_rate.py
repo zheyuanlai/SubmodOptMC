@@ -1,5 +1,5 @@
 import numpy as np # type: ignore
-from mc_generation import stationary_distribution_reversible
+from entropy_rate.old.mc_generation import stationary_distribution_reversible
 
 def compute_entropy_rate(P):
     """
