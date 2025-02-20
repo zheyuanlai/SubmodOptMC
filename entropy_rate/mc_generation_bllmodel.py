@@ -186,7 +186,7 @@ def MC_generation(N, d, l_values, s):
 # Example usage:
 if __name__ == "__main__":
     # Parameters:
-    N = 3         # Total number of particles (kept small for state-space size)
+    N = 8         # Total number of particles (kept small for state-space size)
     d = 15        # Number of dimensions/types
     # l_values must satisfy ∑ lᵢ ≥ N; here we take all lᵢ = 5.
     l_values = [5] * d  
