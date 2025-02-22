@@ -323,8 +323,8 @@ def plot_objective_per_iteration(f_values):
     plt.figure(figsize=(6,4))
     plt.plot(iters, f_values, marker='o')
     plt.title("Entropy rate of output of distorted greedy against subset size")
-    plt.xlabel("Entropy rate")
-    plt.ylabel("Subset size")
+    plt.ylabel("Entropy rate")
+    plt.xlabel("Subset size")
     plt.grid(True)
     plt.show()
 

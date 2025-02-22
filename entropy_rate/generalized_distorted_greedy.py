@@ -6,7 +6,7 @@ import math
 import matplotlib.pyplot as plt
 
 # ------------------------------------------------------
-#  Device selection (simplified)
+#  Device selection
 # ------------------------------------------------------
 #if torch.backends.mps.is_available():
 #    device = torch.device("mps")
@@ -20,9 +20,6 @@ import matplotlib.pyplot as plt
 
 device = 'cpu'
 
-# ------------------------------------------------------
-#  Basic Markov Chain helpers (same as your draft)
-# ------------------------------------------------------
 def poch(a, j):
     """Pochhammer symbol (a)_j = a*(a+1)*...*(a+j-1)."""
     result = 1.0
@@ -254,7 +251,6 @@ def distorted_greedy_k_submod(g, c, V, m, k):
     V is a list/tuple: V[j] is the "universe" for the j-th coordinate.
     m is total cardinality bound: sum_j |S[j]| ≤ m.
     """
-    # Initialize S as k empty sets
     S = [set() for _ in range(k)]
     f_values = []
 
@@ -293,7 +289,7 @@ def distorted_greedy_k_submod(g, c, V, m, k):
         if best_gain > 0 and (best_j is not None) and (best_e is not None):
             S[best_j].add(best_e)
 
-        print(f"Step {i+1}: Set sizes = {[len(S_j) for S_j in S]}, f(S) = {g(S) - c(S)}")
+        print(f"Step {i+1}: Set chosen: {[[(elem + 1) for elem in S_j] for S_j in S]}, f(S) = {g(S) - c(S)}")
         f_values.append(g(S) - c(S))
 
     return S, f_values
@@ -302,44 +298,26 @@ def distorted_greedy_k_submod(g, c, V, m, k):
 #  MAIN Example
 # ------------------------------------------------------
 if __name__ == "__main__":
-    # We choose: N=3, d=15 for the chain
     N = 3
     d = 15
-    l_values = [5]*d  # or any integer >=N
+    l_values = [5]*d
     s = 1
 
-    # Build the Bernoulli–Laplace chain
     state_space, pi, P = torch_MC_generation(N, d, l_values, s)
     print(f"Chain dimension d={d}, #states = {len(state_space)}.")
 
     base_entropy = compute_entropy_rate(P, pi).item()
     print("Full chain's entropy rate:", base_entropy)
 
-    # For k=3:
     k = 3
 
-    # The user-specified V:
-    #   V1 = {1,2,...,6},  V2 = {7,...,12},  V3 = {12,13,14}
-    # In Python, sets are zero-based or whatever, but we'll do exactly as stated:
     V = [
-        set(range(1,7)),        # V[0] -> {1..6}
-        set(range(7,13)),       # V[1] -> {7..12}
-        set(range(12,15))       # V[2] -> {12,13,14}
+        set(range(0,6)),
+        set(range(6,12)),
+        set(range(12,15))
     ]
 
     def k_modular_c(S):
-        """
-        c(S) = sum over every element 'elem' in every coordinate j of S
-            of [H( keep_in_mat(P, V[j] \ {elem}) ) - H( leave_S_out_mat(P, V[j]) )].
-        
-        We interpret:
-        - keep_in_mat(P, ..., V[j] - {elem}) means the chain that
-        aggregates onto coordinates in V[j] minus that single elem.
-        - leave_S_out_mat(P, ..., V[j]) means the chain that excludes
-        the entire set V[j] from the chain.
-        """
-        if isinstance(S, set): S = [S]
-
         total_cost = 0.0
         for j, S_j in enumerate(S):
             for elem in S_j:
@@ -355,21 +333,12 @@ if __name__ == "__main__":
         return total_cost
 
     def k_submod_g(S):
-        """
-        g(S) = sum_{j=1..k} [ H( keep_in_mat(P, S_j) ) ]
-            + k_modular_c(S)
-
-        i.e. we add the standard "submodular-like" part (sum of 
-        entropies over each coordinate's keep set S_j) and then 
-        add the 'distortion' or 'modular' correction from c(S).
-        """
         total = 0.0
         for coords_j in S:
             if coords_j:
                 _, piS, PS = keep_S_in_mat(P, state_space, pi, coords_j)
                 total += compute_entropy_rate(PS, piS).item()
 
-        # Now add the cost term (which is *added* to g)
         total += k_modular_c(S)
         return total
 
@@ -378,14 +347,12 @@ if __name__ == "__main__":
     chosen_S, f_vals = distorted_greedy_k_submod(k_submod_g, k_modular_c, V, m, k)
 
     print("\nDistorted Greedy completed.")
-    print(f"Chosen S (3-tuple): {chosen_S}")
     print("Objective values by iteration:", f_vals)
 
-    # Plot objective
     plt.figure()
     plt.plot(range(1, len(f_vals)+1), f_vals, marker='o')
-    plt.xlabel("Subset size |S|")
-    plt.ylabel("Objective value f(S) = g(S) - c(S)")
-    plt.title("Distorted Greedy (k=3) on Summed Entropies minus Modular Cost")
+    plt.xlabel("Subset size")
+    plt.ylabel("Summed entropy rates")
+    plt.title("Summed entropy rates of output of generalized distorted greedy against subset size")
     plt.grid(True)
     plt.show()
