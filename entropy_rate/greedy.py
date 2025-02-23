@@ -8,17 +8,17 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------------------
 #  Device Selection
 # -----------------------------------------------------------------------
-#if torch.backends.mps.is_available():
-#    device = torch.device("mps")
-#    print("Using MPS device")
-#elif torch.cuda.is_available():
-#    device = torch.device("cuda")
-#    print("Using CUDA device")
-#else:
-#    device = torch.device("cpu")
-#    print("Using CPU device")
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+    print("Using MPS device")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using CUDA device")
+else:
+    device = torch.device("cpu")
+    print("Using CPU device")
 
-device = 'cpu'
+#device = 'cpu'
 # -----------------------------------------------------------------------
 #  Bernoulli–Laplace: Hahn polynomials, state space, etc.
 # -----------------------------------------------------------------------
@@ -104,7 +104,7 @@ def stat_dist_MC_generation(state_space, l_values, N):
         for xi, li in zip(x, l_values):
             num *= math.comb(li, xi)
         pi_vals.append(num/denom)
-    arr = np.array(pi_vals, dtype=np.float64)
+    arr = np.array(pi_vals, dtype=np.float32)
     return arr / arr.sum()
 
 def get_multi_indices(total, length):
@@ -152,7 +152,7 @@ def torch_MC_generation(N, d, l_values, s):
     num_states  = len(state_space)
     pi_np       = stat_dist_MC_generation(state_space, l_values, N)
     # Use double precision for pi
-    pi          = torch.tensor(pi_np, dtype=torch.float64, device=device)
+    pi          = torch.tensor(pi_np, dtype=torch.float32, device=device)
 
     # 2) Eigenvalues
     eigenvals   = compute_eigenvalues(N, s, l_values)
@@ -162,16 +162,16 @@ def torch_MC_generation(N, d, l_values, s):
     for n in range(N+1):
         multi_indices_n = get_multi_indices(n, d-1)
         # float64
-        M_n = np.zeros((num_states, len(multi_indices_n)), dtype=np.float64)
+        M_n = np.zeros((num_states, len(multi_indices_n)), dtype=np.float32)
         for i, x in enumerate(state_space):
             for j, m in enumerate(multi_indices_n):
                 val = multivariate_hahn(m, x, l_values, N)
                 M_n[i,j] = val
         # Convert to torch double
-        M_n_list.append(torch.tensor(M_n, dtype=torch.float64, device=device))
+        M_n_list.append(torch.tensor(M_n, dtype=torch.float32, device=device))
 
     # 4) Build A = sum_{n} beta_n * (M_n @ M_n.T)
-    A = torch.zeros((num_states, num_states), dtype=torch.float64, device=device)
+    A = torch.zeros((num_states, num_states), dtype=torch.float32, device=device)
     for n in range(N+1):
         beta_n = eigenvals[n]
         M_n    = M_n_list[n]
@@ -220,7 +220,7 @@ def keep_S_in_mat(P, state_space, pi, S):
     partial_map = {}
     partial_list = []
     next_idx     = 0
-    full_to_reduced = np.empty(M, dtype=np.int64)
+    full_to_reduced = np.empty(M, dtype=np.int32)
 
     for i, x in enumerate(state_space):
         xS = tuple(x[k] for k in S_list)
@@ -233,12 +233,12 @@ def keep_S_in_mat(P, state_space, pi, S):
     num_reduced = len(partial_list)
 
     # Accumulate pi_S
-    pi_S_np = np.zeros(num_reduced, dtype=np.float64)
+    pi_S_np = np.zeros(num_reduced, dtype=np.float32)
     for i in range(M):
         pi_S_np[ full_to_reduced[i] ] += pi_cpu[i]
 
     # Accumulate transitions
-    P_S_num = np.zeros((num_reduced, num_reduced), dtype=np.float64)
+    P_S_num = np.zeros((num_reduced, num_reduced), dtype=np.float32)
     for x_idx in range(M):
         xS_idx = full_to_reduced[x_idx]
         w_x    = pi_cpu[x_idx]
@@ -279,8 +279,8 @@ def compute_entropy_rate(P, pi):
     """
     H(P) = - sum_{x,y} pi[x]*P[x,y]*log(P[x,y]).
     """
-    pi_64 = pi.double()
-    P_64  = P.double()
+    pi_64 = pi.float()
+    P_64  = P.float()
     # Because we might have P=0 => log(0) = -inf => 0 * -inf => nan,
     # we do a small epsilon inside log.
     val = -torch.sum( pi_64.unsqueeze(1)* P_64 * torch.log(P_64 + 1e-15) )
@@ -303,7 +303,6 @@ def greedy(f, X, k):
         plot_vals.append(f(S))
     return plot_vals
 
-
 def plot_objective_per_iteration(f_values):
     """
     f_values: list of submod function values over iterations.
@@ -322,7 +321,7 @@ def plot_objective_per_iteration(f_values):
 # -----------------------------------------------------------------------
 if __name__=="__main__":
     # For demonstration:
-    N = 3
+    N = 8
     d = 15
     l_values = [5]*d
     s = 1

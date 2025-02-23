@@ -22,127 +22,36 @@ Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 Distorted Greedy (N = 3, d = 15)
 Generated Bernoulli–Laplace chain with dimension d=15. #states=680
 Entropy rate of the full chain = 3.9944279193878174
-Iteration 1, S = {1}
-Iteration 2, S = {1, 3}
-Iteration 3, S = {1, 3, 4}
-Iteration 4, S = {1, 3, 4, 5}
-Iteration 5, S = {1, 3, 4, 5, 6}
-Iteration 6, S = {1, 3, 4, 5, 6, 7}
-Iteration 7, S = {1, 2, 3, 4, 5, 6, 7}
-Iteration 8, S = {1, 2, 3, 4, 5, 6, 7, 8}
-Iteration 9, S = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-Iteration 10, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-Iteration 11, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
-Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-[0.5304027795791626, 1.0413455963134766, 1.5302308797836304, 1.993862271308899, 2.4281084537506104, 2.827843189239502, 3.1904401779174805, 3.513949394226074, 3.7882702350616455, 4.005624771118164, 4.156752586364746, 4.228015899658203, 4.228015899658203, 4.228015899658203, 4.228015899658203]
+Cardinality constraint 1; Subset chosen: {1}; Value: 0.5304027795791626
+Cardinality constraint 2; Subset chosen: {1, 3}; Value: 1.0413455963134766
+Cardinality constraint 3; Subset chosen: {1, 3, 4}; Value: 1.5302308797836304
+Cardinality constraint 4; Subset chosen: {1, 3, 4, 5}; Value: 1.993862271308899
+Cardinality constraint 5; Subset chosen: {1, 3, 4, 5, 6}; Value: 2.4281084537506104
+Cardinality constraint 6; Subset chosen: {1, 3, 4, 5, 6, 7}; Value: 2.827843189239502
+Cardinality constraint 7; Subset chosen: {1, 2, 3, 4, 5, 6, 7}; Value: 3.1904401779174805
+Cardinality constraint 8; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8}; Value: 3.513949394226074
+Cardinality constraint 9; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 3.7882702350616455
+Cardinality constraint 10; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; Value: 4.005624771118164
+Cardinality constraint 11; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; Value: 4.156752586364746
+Cardinality constraint 12; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}; Value: 4.228015899658203
+Cardinality constraint 13; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}; Value: 4.228015899658203
+Cardinality constraint 14; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}; Value: 4.228015899658203
+Cardinality constraint 15; Subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}; Value: 4.228015899658203
+Distorted Greedy finished.
+f-values: [0.5304027795791626, 1.0413455963134766, 1.5302308797836304, 1.993862271308899, 2.4281084537506104, 2.827843189239502, 3.1904401779174805, 3.513949394226074, 3.7882702350616455, 4.005624771118164, 4.156752586364746, 4.228015899658203, 4.228015899658203, 4.228015899658203, 4.228015899658203]
 
-Heuristic Greedy (N = 2, d = 20)
-Using CPU device
-Generated Bernoulli–Laplace chain with dimension d=20. #states=210
-Entropy rate of the full chain = 3.1811399459838867
-Iteration 1, S = {4}
-Iteration 2, S = {3, 4}
-Iteration 3, S = {3, 4, 5}
-Iteration 4, S = {3, 4, 5, 6}
-Iteration 5, S = {3, 4, 5, 6, 7}
-Iteration 6, S = {3, 4, 5, 6, 7, 8}
-Iteration 7, S = {2, 3, 4, 5, 6, 7, 8}
-Iteration 8, S = {2, 3, 4, 5, 6, 7, 8, 9}
-Iteration 9, S = {2, 3, 4, 5, 6, 7, 8, 9, 10}
-Iteration 10, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
-Iteration 11, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
-Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
-Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
-Iteration 16, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
-Iteration 17, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-Iteration 18, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-Iteration 19, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-Iteration 20, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-f-values: [0.3147468864917755, 0.6196120977401733, 0.91424161195755, 1.1969841718673706, 1.4664602279663086, 1.7212474346160889, 1.9631783962249756, 2.189082622528076, 2.397233247756958, 2.5861852169036865, 2.754456043243408, 2.90327525138855, 3.0341403484344482, 3.1417174339294434, 3.224527359008789, 3.280622959136963, 3.306022882461548, 3.306022882461548, 3.306022882461548, 3.306022882461548]
-
-Distorted Greedy (N = 2, d = 20)
-Using CPU device
-Generated Bernoulli–Laplace chain with dimension d=20. #states=210
-Entropy rate of the full chain = 3.1811399459838867
-Iteration 1, S = {4}
-Iteration 2, S = {3, 4}
-Iteration 3, S = {3, 4, 5}
-Iteration 4, S = {3, 4, 5, 6}
-Iteration 5, S = {3, 4, 5, 6, 7}
-Iteration 6, S = {3, 4, 5, 6, 7, 8}
-Iteration 7, S = {2, 3, 4, 5, 6, 7, 8}
-Iteration 8, S = {2, 3, 4, 5, 6, 7, 8, 9}
-Iteration 9, S = {2, 3, 4, 5, 6, 7, 8, 9, 10}
-Iteration 10, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
-Iteration 11, S = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 12, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 13, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
-Iteration 14, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
-Iteration 15, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
-Iteration 16, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
-Iteration 17, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-Iteration 18, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-Iteration 19, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-Iteration 20, S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
-f-values: [0.3147468864917755, 0.6196120977401733, 0.91424161195755, 1.1969841718673706, 1.4664602279663086, 1.7212474346160889, 1.9631783962249756, 2.189082622528076, 2.397233247756958, 2.5861852169036865, 2.754456043243408, 2.90327525138855, 3.0341403484344482, 3.1417174339294434, 3.224527359008789, 3.280622959136963, 3.306022882461548, 3.306022882461548, 3.306022882461548, 3.306022882461548]
-
-Heuristic Greedy (N = 2, d = 40)
-Using CUDA device
-Generated Bernoulli–Laplace chain with dimension d=40. #states=820
-Entropy rate of the full chain = 4.082370281219482
-Iteration 1, S = {6}
-Iteration 2, S = {6, 7}
-Iteration 3, S = {8, 6, 7}
-Iteration 4, S = {8, 9, 6, 7}
-Iteration 5, S = {5, 6, 7, 8, 9}
-Iteration 6, S = {5, 6, 7, 8, 9, 10}
-Iteration 7, S = {5, 6, 7, 8, 9, 10, 11}
-Iteration 8, S = {5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 9, S = {4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 10, S = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
-f-values: [0.18875521421432495, 0.3751726746559143, 0.5590423345565796, 0.7401516437530518, 0.9184885025024414, 1.093918800354004, 1.2661001682281494, 1.434817910194397, 1.6000617742538452, 1.761986255645752]
-
-Distorted Greedy (N = 2, d = 40)
-Using CUDA device
-Generated Bernoulli–Laplace chain with dimension d=40. #states=820
-Entropy rate of the full chain = 4.082370281219482
-Iteration 1, S = {6}
-Iteration 2, S = {6, 7}
-Iteration 3, S = {8, 6, 7}
-Iteration 4, S = {8, 9, 6, 7}
-Iteration 5, S = {5, 6, 7, 8, 9}
-Iteration 6, S = {5, 6, 7, 8, 9, 10}
-Iteration 7, S = {5, 6, 7, 8, 9, 10, 11}
-Iteration 8, S = {5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 9, S = {4, 5, 6, 7, 8, 9, 10, 11, 12}
-Iteration 10, S = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
-
-Distorted Greedy finished. Subset chosen = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
-f-values: [0.18875521421432495, 0.3751726746559143, 0.5590423345565796, 0.7401516437530518, 0.9184885621070862, 1.093918800354004, 1.2661001682281494, 1.434817910194397, 1.6000617742538452, 1.761986255645752]
-
-Generalized Distorted Greedy (N = 3, d = 15, V_1 = {1, 2, 3, 4, 5, 6}, V_2 = {7, 8, 9, 10, 11, 12}, V_3 = {13, 14, 15})
+Generalized Distorted Greedy (N = 3, d = 15, V_1 = {0, 1, 2, 3, 4, 5}, V_2 = {6, 7, 8, 9, 10, 11}, V_3 = {12, 13, 14})
 Chain dimension d=15, #states = 680.
 Full chain's entropy rate: 3.9944279193878174
-Step 1: Set chosen: [[], [], [13]], f(S) = 0.3358497619628906
-Step 2: Set chosen: [[], [], [14, 13]], f(S) = 0.5795978903770447
-Step 3: Set chosen: [[], [], [14, 13, 15]], f(S) = 0.5330866575241089
-Step 4: Set chosen: [[], [7], [14, 13, 15]], f(S) = 1.0406302213668823
-Step 5: Set chosen: [[], [7, 8], [14, 13, 15]], f(S) = 1.5196850895881653
-Step 6: Set chosen: [[], [7, 8, 9], [14, 13, 15]], f(S) = 1.9635995626449585
-Step 7: Set chosen: [[], [7, 8, 9, 10], [14, 13, 15]], f(S) = 2.3646334409713745
-Step 8: Set chosen: [[], [7, 8, 9, 11, 10], [14, 13, 15]], f(S) = 2.713807463645935
-Step 9: Set chosen: [[], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 3.0001710653305054
-Step 10: Set chosen: [[6], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 3.517185091972351
-Step 11: Set chosen: [[4, 6], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 4.030720233917236
-Step 12: Set chosen: [[4, 6, 3], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 4.526602506637573
-Step 13: Set chosen: [[4, 6, 3, 5], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 4.991231679916382
-Step 14: Set chosen: [[2, 4, 6, 3, 5], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 5.4222084283828735
-Step 15: Set chosen: [[1, 2, 4, 6, 3, 5], [7, 8, 12, 9, 11, 10], [14, 13, 15]], f(S) = 5.7455116510391235
-
-Distorted Greedy completed.
-Objective values by iteration: [0.3358497619628906, 0.5795978903770447, 0.5330866575241089, 1.0406302213668823, 1.5196850895881653, 1.9635995626449585, 2.3646334409713745, 2.713807463645935, 3.0001710653305054, 3.517185091972351, 4.030720233917236, 4.526602506637573, 4.991231679916382, 5.4222084283828735, 5.7455116510391235]
+Chain dimension d=15, #states = 680.
+Full chain's entropy rate: 3.9944279193878174
+Cardinality constraint 1; Subset chosen: [{1}, set(), set()]; Value: 0.5304027795791626
+Cardinality constraint 2; Subset chosen: [{1}, set(), {12}]; Value: 0.8662525415420532
+Cardinality constraint 3; Subset chosen: [{1}, set(), {13, 12}]; Value: 1.1100006699562073
+Cardinality constraint 4; Subset chosen: [{1}, set(), {13, 12, 14}]; Value: 1.0634894371032715
+Cardinality constraint 5; Subset chosen: [{1}, {6}, {13, 12, 14}]; Value: 1.571033000946045
+Cardinality constraint 6; Subset chosen: [{1}, {6, 7}, {13, 12, 14}]; Value: 2.050087869167328
+Cardinality constraint 7; Subset chosen: [{1}, {6, 7, 8}, {13, 12, 14}]; Value: 2.494002342224121
+Cardinality constraint 8; Subset chosen: [{2, 3}, {6, 7, 8}, {13, 12, 14}]; Value: 3.0036767721176147
+Cardinality constraint 9; Subset chosen: [{2, 3}, {6, 7, 8, 9}, {13, 12, 14}]; Value: 3.4047106504440308
+Cardinality constraint 10; Subset chosen: [{3, 1, 4}, {6, 7, 8, 9}, {13, 12, 14}]; Value: 3.894864320755005

@@ -252,24 +252,16 @@ def distorted_greedy_k_submod(g, c, V, m, k):
     m is total cardinality bound: sum_j |S[j]| ≤ m.
     """
     S = [set() for _ in range(k)]
-    f_values = []
 
     for i in range(m):
         best_gain = float('-inf')
         best_j    = None
         best_e    = None
 
-        current_size = sum(len(S_j) for S_j in S)
-        if current_size >= m:
-            break
+        factor = (1.0 - 1.0/m)**(m - (i+1))
 
         for j in range(k):
             for e in (V[j] - S[j]):
-                if current_size + 1 > m:
-                    continue
-
-                factor = (1.0 - 1.0/m)**(m - (i+1))
-
                 old_g = g(S)
                 old_c = c(S)
                 S[j].add(e)
@@ -286,13 +278,10 @@ def distorted_greedy_k_submod(g, c, V, m, k):
                     best_j = j
                     best_e = e
 
-        if best_gain > 0 and (best_j is not None) and (best_e is not None):
+        if best_gain > 0:
             S[best_j].add(best_e)
 
-        print(f"Step {i+1}: Set chosen: {[[(elem + 1) for elem in S_j] for S_j in S]}, f(S) = {g(S) - c(S)}")
-        f_values.append(g(S) - c(S))
-
-    return S, f_values
+    return S
 
 # ------------------------------------------------------
 #  MAIN Example
@@ -342,17 +331,20 @@ if __name__ == "__main__":
         total += k_modular_c(S)
         return total
 
-    m = 15
-
-    chosen_S, f_vals = distorted_greedy_k_submod(k_submod_g, k_modular_c, V, m, k)
+    f_vals = []
+    for m in range(1, d + 1):
+        S = distorted_greedy_k_submod(k_submod_g, k_modular_c, V, m, k)
+        f_val = k_submod_g(S) - k_modular_c(S)
+        f_vals.append(f_val)
+        print(f"Cardinality constraint {m}; Subset chosen: {S}; Value: {f_val}")
 
     print("\nDistorted Greedy completed.")
-    print("Objective values by iteration:", f_vals)
+    print("Record:", f_vals)
 
-    plt.figure()
-    plt.plot(range(1, len(f_vals)+1), f_vals, marker='o')
-    plt.xlabel("Subset size")
-    plt.ylabel("Summed entropy rates")
-    plt.title("Summed entropy rates of output of generalized distorted greedy against subset size")
-    plt.grid(True)
-    plt.show()
+    #plt.figure()
+    #plt.plot(range(1, len(f_vals)+1), f_vals, marker='o')
+    #plt.xlabel("Subset size")
+    #plt.ylabel("Summed entropy rates")
+    #plt.title("Summed entropy rates of output of generalized distorted greedy against subset size")
+    #plt.grid(True)
+    #plt.show()

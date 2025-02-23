@@ -294,7 +294,6 @@ def distorted_greedy(f, c, U, m):
     Distorted greedy with the set function f, cost c, ground set U.
     """
     S = set()
-    results = []
     for i in range(m):
         best_gain = float('-inf')
         best_e    = None
@@ -303,17 +302,12 @@ def distorted_greedy(f, c, U, m):
             if gain>best_gain:
                 best_gain = gain
                 best_e    = e
-        
-        # Optionally only add if gain>0
         if best_e is not None:
             check_gain = ((1 - 1/m)**(m - (i+1))) * (f(S|{best_e})- f(S)) - c({best_e})
             if check_gain>0:
                 S.add(best_e)
 
-        print(f"Iteration {i+1}, S = {S}")
-        # track f(S) for plotting
-        results.append( f(S) - c(S))
-    return S, results
+    return S
 
 def plot_objective_per_iteration(f_values):
     """
@@ -332,21 +326,17 @@ def plot_objective_per_iteration(f_values):
 #  MAIN
 # -----------------------------------------------------------------------
 if __name__=="__main__":
-    # For demonstration:
-    N = 3
+    N = 4
     d = 15
     l_values = [5]*d
     s = 1
 
-    # Generate the chain with debug checks
     state_space, pi, P = torch_MC_generation(N, d, l_values, s)
     print(f"Generated Bernoulli–Laplace chain with dimension d={d}. #states={len(state_space)}")
 
-    # We'll compute the base chain's entropy once
     base_entropy = compute_entropy_rate(P, pi).item()
     print(f"Entropy rate of the full chain = {base_entropy}")
 
-    # Example "modular_func": sum_{elem in S} [ H(leaveOut(elem)) - H(full) ]
     def modular_func(S):
         val = 0.0
         for e in S:
@@ -354,17 +344,20 @@ if __name__=="__main__":
             val += compute_entropy_rate(P_minus, pi_minus).item() - base_entropy
         return val
 
-    # Example "submod_func": f(S) = H( keep_S_in_mat(...) ) + modular_func(S)
     def submod_func(S):
         _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
         return compute_entropy_rate(PS, piS).item() + modular_func(S)
 
-    # Distorted Greedy
     U = set(range(d))
-    chosen_subset, f_values = distorted_greedy(submod_func, modular_func, U, m=d)
+    f_values = []
+
+    for m in range(1, d+1):
+        chosen_subset = distorted_greedy(submod_func, modular_func, U, m)
+        f_val = submod_func(chosen_subset)
+        f_values.append(f_val)
+        print(f"Cardinality constraint {m}; Subset chosen: {chosen_subset}; Value: {f_val}")
 
     print(f"\nDistorted Greedy finished. Subset chosen = {chosen_subset}")
     print("f-values:", f_values)
 
-    # Plot
     plot_objective_per_iteration(f_values)
