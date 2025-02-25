@@ -43,8 +43,6 @@ f-values: [0.5304027795791626, 1.0413455963134766, 1.5302308797836304, 1.9938622
 Generalized Distorted Greedy (N = 3, d = 15, V_1 = {0, 1, 2, 3, 4, 5}, V_2 = {6, 7, 8, 9, 10, 11}, V_3 = {12, 13, 14})
 Chain dimension d=15, #states = 680.
 Full chain's entropy rate: 3.9944279193878174
-Chain dimension d=15, #states = 680.
-Full chain's entropy rate: 3.9944279193878174
 Cardinality constraint 1; Subset chosen: [{1}, set(), set()]; Value: 0.5304027795791626
 Cardinality constraint 2; Subset chosen: [{1}, set(), {12}]; Value: 0.8662525415420532
 Cardinality constraint 3; Subset chosen: [{1}, set(), {13, 12}]; Value: 1.1100006699562073

@@ -326,9 +326,9 @@ def plot_objective_per_iteration(f_values):
 #  MAIN
 # -----------------------------------------------------------------------
 if __name__=="__main__":
-    N = 4
+    N = 3
     d = 15
-    l_values = [5]*d
+    l_values = [3]*d
     s = 1
 
     state_space, pi, P = torch_MC_generation(N, d, l_values, s)
@@ -351,7 +351,7 @@ if __name__=="__main__":
     U = set(range(d))
     f_values = []
 
-    for m in range(1, d+1):
+    for m in range(1, d + 1):
         chosen_subset = distorted_greedy(submod_func, modular_func, U, m)
         f_val = submod_func(chosen_subset)
         f_values.append(f_val)
