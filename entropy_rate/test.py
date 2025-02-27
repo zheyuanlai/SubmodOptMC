@@ -8,15 +8,17 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------------------
 #  Device Selection
 # -----------------------------------------------------------------------
-#if torch.backends.mps.is_available():
-#    device = torch.device("mps")
-#    print("Using MPS device")
-#elif torch.cuda.is_available():
-#    device = torch.device("cuda")
-#    print("Using CUDA device")
-#else:
-#    device = torch.device("cpu")
-#    print("Using CPU device")
+'''
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+    print("Using MPS device")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using CUDA device")
+else:
+    device = torch.device("cpu")
+    print("Using CPU device")
+'''
 
 device = 'cpu'
 # -----------------------------------------------------------------------
@@ -104,7 +106,7 @@ def stat_dist_MC_generation(state_space, l_values, N):
         for xi, li in zip(x, l_values):
             num *= math.comb(li, xi)
         pi_vals.append(num/denom)
-    arr = np.array(pi_vals, dtype=np.float64)
+    arr = np.array(pi_vals, dtype=np.float32)
     return arr / arr.sum()
 
 def get_multi_indices(total, length):
@@ -152,7 +154,7 @@ def torch_MC_generation(N, d, l_values, s):
     num_states  = len(state_space)
     pi_np       = stat_dist_MC_generation(state_space, l_values, N)
     # Use double precision for pi
-    pi          = torch.tensor(pi_np, dtype=torch.float64, device=device)
+    pi          = torch.tensor(pi_np, dtype=torch.float32, device=device)
 
     # 2) Eigenvalues
     eigenvals   = compute_eigenvalues(N, s, l_values)
@@ -162,16 +164,16 @@ def torch_MC_generation(N, d, l_values, s):
     for n in range(N+1):
         multi_indices_n = get_multi_indices(n, d-1)
         # float64
-        M_n = np.zeros((num_states, len(multi_indices_n)), dtype=np.float64)
+        M_n = np.zeros((num_states, len(multi_indices_n)), dtype=np.float32)
         for i, x in enumerate(state_space):
             for j, m in enumerate(multi_indices_n):
                 val = multivariate_hahn(m, x, l_values, N)
                 M_n[i,j] = val
         # Convert to torch double
-        M_n_list.append(torch.tensor(M_n, dtype=torch.float64, device=device))
+        M_n_list.append(torch.tensor(M_n, dtype=torch.float32, device=device))
 
     # 4) Build A = sum_{n} beta_n * (M_n @ M_n.T)
-    A = torch.zeros((num_states, num_states), dtype=torch.float64, device=device)
+    A = torch.zeros((num_states, num_states), dtype=torch.float32, device=device)
     for n in range(N+1):
         beta_n = eigenvals[n]
         M_n    = M_n_list[n]
@@ -220,7 +222,7 @@ def keep_S_in_mat(P, state_space, pi, S):
     partial_map = {}
     partial_list = []
     next_idx     = 0
-    full_to_reduced = np.empty(M, dtype=np.int64)
+    full_to_reduced = np.empty(M, dtype=np.int32)
 
     for i, x in enumerate(state_space):
         xS = tuple(x[k] for k in S_list)
@@ -233,12 +235,12 @@ def keep_S_in_mat(P, state_space, pi, S):
     num_reduced = len(partial_list)
 
     # Accumulate pi_S
-    pi_S_np = np.zeros(num_reduced, dtype=np.float64)
+    pi_S_np = np.zeros(num_reduced, dtype=np.float32)
     for i in range(M):
         pi_S_np[ full_to_reduced[i] ] += pi_cpu[i]
 
     # Accumulate transitions
-    P_S_num = np.zeros((num_reduced, num_reduced), dtype=np.float64)
+    P_S_num = np.zeros((num_reduced, num_reduced), dtype=np.float32)
     for x_idx in range(M):
         xS_idx = full_to_reduced[x_idx]
         w_x    = pi_cpu[x_idx]
@@ -279,50 +281,29 @@ def compute_entropy_rate(P, pi):
     """
     H(P) = - sum_{x,y} pi[x]*P[x,y]*log(P[x,y]).
     """
-    pi_64 = pi.double()
-    P_64  = P.double()
+    pi_64 = pi.float()
+    P_64  = P.float()
+    # Because we might have P=0 => log(0) = -inf => 0 * -inf => nan,
+    # we do a small epsilon inside log.
     val = -torch.sum( pi_64.unsqueeze(1)* P_64 * torch.log(P_64 + 1e-15) )
     return val.float()
 
-def KL_divergence_gpu(pi, P, Q):
-    """
-    Computes the Kullback-Leibler divergence KL(P||Q) on the GPU.
-    P and Q are torch tensors (transition matrices).
-    KL(P||Q) = sum_x pi[x] * sum_y P[x,y] * log(P[x,y]/Q[x,y]),
-    where pi is the stationary distribution of P.
-    """
-    kl = torch.sum(pi.unsqueeze(1) * P * torch.log((P + 1e-10) / (Q + 1e-10)))
-    return kl
-
-def compute_outer_product_gpu(A, B):
-    """
-    Computes the outer (Kronecker) product of matrices A and B on the GPU.
-    Uses torch.kron for efficiency.
-    """
-    return torch.kron(A, B)
-
 # -----------------------------------------------------------------------
-#  Distorted Greedy
+#  Greedy
 # -----------------------------------------------------------------------
-def distorted_greedy(f, c, U, m):
+def greedy(f, X, k):
     """
-    Distorted greedy with the set function f, cost c, ground set U.
+    Greedy algorithm for submodular maximization with cardinality constraints.
     """
     S = set()
-    for i in range(m):
-        best_gain = float('-inf')
-        best_e    = None
-        for e in (U - S):
-            gain = ((1 - 1/m)**(m - (i+1))) * (f(S | {e}) - f(S)) - c({e})
-            if gain>best_gain:
-                best_gain = gain
-                best_e    = e
-        if best_e is not None:
-            check_gain = ((1 - 1/m)**(m - (i+1))) * (f(S|{best_e})- f(S)) - c({best_e})
-            if check_gain>0:
-                S.add(best_e)
-
-    return S
+    plot_vals = []
+    for i in range(k):
+        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
+        gain, elem = max(gains)
+        if gain >= 0: S.add(elem)
+        print(f"Iteration {i+1}, S = {S}")
+        plot_vals.append(f(S))
+    return plot_vals
 
 def plot_objective_per_iteration(f_values):
     """
@@ -331,9 +312,9 @@ def plot_objective_per_iteration(f_values):
     iters = range(1, len(f_values)+1)
     plt.figure(figsize=(6,4))
     plt.plot(iters, f_values, marker='o')
-    plt.title("Entropy rate of output of distorted greedy against subset size")
-    plt.ylabel("Entropy rate")
+    plt.title("Entropy rate of the output of greedy algorithm against subset size")
     plt.xlabel("Subset size")
+    plt.ylabel("Entropy rate")
     plt.grid(True)
     plt.show()
 
@@ -349,32 +330,8 @@ if __name__=="__main__":
     state_space, pi, P = torch_MC_generation(N, d, l_values, s)
     print(f"Generated Bernoulli–Laplace chain with dimension d={d}. #states={len(state_space)}")
 
-    def f(S):
+    def submod_func(S):
         _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
-        _, piSbar, PSbar = leave_S_out_mat(P, state_space, pi, S)
-        return KL_divergence_gpu(pi, P, compute_outer_product_gpu(PS, PSbar))
-    
-    def c(S):
-        val = 0.0
-        for e in S:
-            _, pi_minus, P_minus = leave_S_out_mat(P, state_space, pi, {e})
-            _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {e})
-            val += KL_divergence_gpu(pi, P, compute_outer_product_gpu(P_minus, P_e))
-        return val
+        return compute_entropy_rate(PS, piS).item()
 
-    def g(S):
-        return f(S) + c(S)
-
-    U = set(range(d))
-    f_values = []
-
-    for m in range(1, d + 1):
-        chosen_subset = distorted_greedy(g, c, U, m)
-        f_val = f(chosen_subset)
-        f_values.append(f_val)
-        print(f"Cardinality constraint {m}; Subset chosen: {chosen_subset}; Value: {f_val}")
-
-    print(f"\nDistorted Greedy finished. Subset chosen = {chosen_subset}")
-    print("f-values:", f_values)
-
-    plot_objective_per_iteration(f_values)
+    print(submod_func({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0}))

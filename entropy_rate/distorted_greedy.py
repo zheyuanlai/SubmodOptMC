@@ -328,7 +328,7 @@ def plot_objective_per_iteration(f_values):
 if __name__=="__main__":
     N = 3
     d = 15
-    l_values = [3]*d
+    l_values = [5]*d
     s = 1
 
     state_space, pi, P = torch_MC_generation(N, d, l_values, s)
@@ -353,7 +353,7 @@ if __name__=="__main__":
 
     for m in range(1, d + 1):
         chosen_subset = distorted_greedy(submod_func, modular_func, U, m)
-        f_val = submod_func(chosen_subset)
+        f_val = submod_func(chosen_subset) - modular_func(chosen_subset)
         f_values.append(f_val)
         print(f"Cardinality constraint {m}; Subset chosen: {chosen_subset}; Value: {f_val}")
 
