@@ -200,75 +200,70 @@ def torch_MC_generation(N, d, l_values, s):
 # -----------------------------------------------------------------------
 #  Aggregation: keep / leave subset of coordinates
 # -----------------------------------------------------------------------
+
 def keep_S_in_mat(P, state_space, pi, S):
     """
-    Aggregates the full chain (P, pi) onto coordinates S.
+    Aggregates the Markov chain (P, pi) onto the coordinates in S.
+
+    Parameters:
+        P (torch.Tensor): The transition matrix of the Markov chain.
+        state_space (list of tuples): The original state space.
+        pi (torch.Tensor): The stationary distribution.
+        S (set): The subset of indices to retain.
     
-    Return (partial_states, pi_S, P_S):
-      - partial_states is a list of new states x_S,
-      - pi_S[i] = sum_{x: x|S = partial_states[i]} pi(x),
-      - P_S[i,j] = (1/pi_S[i]) * sum_{x|S=i} sum_{y|S=j} pi(x)*P(x,y).
+    Returns:
+        tuple: (partial_states, pi_S, P_S) where
+          - `partial_states` is a list of reduced states x_S,
+          - `pi_S[i] = sum_{x: x|S = partial_states[i]} pi(x)`,
+          - `P_S[i,j] = (1/pi_S[i]) * sum_{x|S=i} sum_{y|S=j} pi(x)*P(x,y)`.
     """
     M = len(state_space)
-    S_list = sorted(list(S))
+    S_list = sorted(list(S))  # Convert set to ordered list for indexing
 
-    # Convert to CPU for loops
-    pi_cpu = pi.detach().cpu().numpy()
-    P_cpu  = P.detach().cpu().numpy()
-
-    # Map each full state -> partial state index
+    # Create mapping from full state to reduced state index
     partial_map = {}
     partial_list = []
-    next_idx     = 0
-    full_to_reduced = np.empty(M, dtype=np.int64)
+    full_to_reduced = torch.empty(M, dtype=torch.int64, device=device)
 
+    next_idx = 0
     for i, x in enumerate(state_space):
-        xS = tuple(x[k] for k in S_list)
-        if xS not in partial_map:
-            partial_map[xS] = next_idx
-            partial_list.append(xS)
+        x_S = tuple(x[k] for k in S_list)
+        if x_S not in partial_map:
+            partial_map[x_S] = next_idx
+            partial_list.append(x_S)
             next_idx += 1
-        full_to_reduced[i] = partial_map[xS]
+        full_to_reduced[i] = partial_map[x_S]
 
     num_reduced = len(partial_list)
 
-    # Accumulate pi_S
-    pi_S_np = np.zeros(num_reduced, dtype=np.float64)
+    # Compute marginal pi_S
+    pi_S = torch.zeros(num_reduced, dtype=torch.float64, device=device)
     for i in range(M):
-        pi_S_np[ full_to_reduced[i] ] += pi_cpu[i]
+        pi_S[full_to_reduced[i]] += pi[i]
 
-    # Accumulate transitions
-    P_S_num = np.zeros((num_reduced, num_reduced), dtype=np.float64)
+    # Compute reduced transition matrix P_S
+    P_S_num = torch.zeros((num_reduced, num_reduced), dtype=torch.float64, device=device)
     for x_idx in range(M):
         xS_idx = full_to_reduced[x_idx]
-        w_x    = pi_cpu[x_idx]
-        if w_x<1e-15:
+        w_x = pi[x_idx]
+        if w_x < 1e-15:
             continue
-        row_x  = P_cpu[x_idx]
-        for y_idx, p_xy in enumerate(row_x):
-            if p_xy<1e-15:
+        for y_idx in range(M):
+            if P[x_idx, y_idx] < 1e-15:
                 continue
             yS_idx = full_to_reduced[y_idx]
-            P_S_num[xS_idx, yS_idx] += w_x*p_xy
+            P_S_num[xS_idx, yS_idx] += w_x * P[x_idx, y_idx]
 
-    # Divide each row by pi_S
-    P_S_np_final = np.zeros_like(P_S_num)
+    # Normalize rows by pi_S
+    P_S = torch.zeros_like(P_S_num)
     for i in range(num_reduced):
-        if pi_S_np[i]>1e-15:
-            P_S_np_final[i, :] = P_S_num[i, :] / pi_S_np[i]
-        # else row stays 0
+        if pi_S[i] > 1e-15:
+            P_S[i, :] = P_S_num[i, :] / pi_S[i]
 
-    # Convert back to torch
-    pi_S = torch.tensor(pi_S_np, dtype=torch.float32, device=device)
-    P_S  = torch.tensor(P_S_np_final, dtype=torch.float32, device=device)
-
-    return partial_list, pi_S, P_S
+    return partial_list, pi_S.to(torch.float32), P_S.to(torch.float32)
 
 def leave_S_out_mat(P, state_space, pi, S):
-    """
-    Complement subset: we keep all coords except those in S.
-    """
-    d = len(state_space[0])  # original dimension
+    d = len(state_space[0])
     Sbar = set(range(d)) - set(S)
     return keep_S_in_mat(P, state_space, pi, Sbar)
 
@@ -281,7 +276,7 @@ def compute_entropy_rate(P, pi):
     """
     pi_64 = pi.double()
     P_64  = P.double()
-    val = -torch.sum( pi_64.unsqueeze(1)* P_64 * torch.log(P_64 + 1e-15) )
+    val = -torch.sum(pi_64.unsqueeze(1)* P_64 * torch.log(P_64 + 1e-15))
     return val.float()
 
 def KL_divergence_gpu(pi, P, Q):
