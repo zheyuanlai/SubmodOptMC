@@ -2,29 +2,24 @@
 
 We use submodularity maximization on entropy rate to find an optimal subset Markov chain (with the largest entropy rate) with cardinality constraints.
 
+For the generation of Markov chain, we generate a generalized Bernoulli–Laplace model as detailed in Section 4.2 of [2].
+
 The following map:
 $$S \mapsto H(P^{(S)})$$
-is submodular but generally not monotonically non-decreasing, so the greedy algorithm used is a heuristic algorithm but not near-optimal. Hence, we also consider the following map:
-$$S \mapsto H(P^{(S)}) = H(\pi^{(S)} \boxtimes P^{(S)}) - H(\pi^{(S)}),$$
-which is a monotonically non-decreasing submodular function minus a modular function if we assume that $\pi$ is of product form, i.e. $\pi = \otimes_{i=1}^d \pi_i$, and we can use distorted greedy algorithm for this objective function.
+is submodular but generally not monotonically non-decreasing, so the greedy algorithm used is a heuristic algorithm (see Section 4 of [1]) but not near-optimal. 
 
-![Distorted Greedy Algorithm](/assets/distgrdy.png)
+We apply the following distorted greedy algorithm to solve this problem with a lower bound, which is introduced in [3], see Corollary 2.2 of the manuscript for the detailed approach.
 
 We consider the following approaches:
-* Approach 1: Heuristic greedy algorithm, see `main_approach_1.py` and `main_approach_1_gpu.py`.
-* Approach 2: Distorted greedy algorithm, requiring $\pi$ to be of product form, see `main_approach_2.py` and `main_approach_2_gpu.py`.
-* Approach 3: Distorted greedy algorithm, choose $\beta = 0$, see `main_approach_3_gpu.py`.
+* Approach 1: Heuristic greedy algorithm, see `greedy.py`.
+* Approach 2: Distorted greedy algorithm, choose $\beta = 0$, see `distorted_greedy.py`.
 
-The following is the visualization these algorithms, in which case we aim to choose a subset Markov chain with at most 4 dimensions out of a 15-dimensional Markov chain.
+We also want to maximize the entropy rate of the tensorized keep-$S_i$-in matrices $$H(\otimes_{i=1}^k P^{(S_i)})$$, specifically, we aim to consider the following maximization problem:
+$$\mathbf{S} = (S_1, \ldots, S_k) \mapsto H(\otimes_{i=1}^k P^{(S_i)})$$.
 
-**Approach 1**
-![visualization](/assets/sample_paths_entropyrate_1.png)
-
-**Approach 2**
-![visualization](/assets/sample_paths_entropyrate_2.png)
-
-**Approach 3**
-![visualization](/assets/sample_paths_entropyrate_3.png)
+We first apply Theorem 1.12 to give a $k$-submodular function $g$ and a modular function $c$, then we apply the generalized distorted greedy algorithm, see Corollary 2.5 for the detailed approach.
 
 # References
-* [1] Harshaw, C., Feldman, M., Ward, J., & Karbasi, A. (2019). Submodular maximization beyond non-negativity: Guarantees, fast algorithms, and applications. In International Conference on Machine Learning (pp. 2634-2643). PMLR.
+* [1] Nemhauser, G.L., Wolsey, L.A. & Fisher, M.L. An analysis of approximations for maximizing submodular set functions—I. Mathematical Programming 14, 265–294 (1978). https://doi.org/10.1007/BF01588971
+* [2] Kshitij Khare. Hua Zhou. "Rates of convergence of some multivariate Markov chains with polynomial eigenfunctions." Ann. Appl. Probab. 19 (2) 737 - 777, April 2009. https://doi.org/10.1214/08-AAP562
+* [3] Harshaw, C., Feldman, M., Ward, J., & Karbasi, A. (2019). Submodular maximization beyond non-negativity: Guarantees, fast algorithms, and applications. In International Conference on Machine Learning (pp. 2634-2643). PMLR.
