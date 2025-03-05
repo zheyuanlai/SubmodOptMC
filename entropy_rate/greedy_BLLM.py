@@ -309,7 +309,7 @@ if __name__ == "__main__":
     # Parameters for product state space:
     N = 10
     d = 11  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [15]  # sum = 10+15=25 > N=10.
+    l_values = [1]*(d-1) + [10]  # sum = 10+15=25 > N=10.
     s = 1
 
     # Generate Markov chain with vectorized operations:

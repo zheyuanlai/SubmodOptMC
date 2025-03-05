@@ -276,21 +276,36 @@ def keep_S_in_mat(P, state_space, pi, S):
     P_S = torch.tensor(P_S_np_final, dtype=torch.float32, device=device)
     return partial_list, pi_S, P_S
 
+def leave_S_out_mat(P, state_space, pi, S):
+    """
+    Complement subset: we keep all coords except those in S.
+    """
+    d = len(state_space[0])
+    Sbar = set(range(d)) - set(S)
+    return keep_S_in_mat(P, state_space, pi, Sbar)
+
 def compute_entropy_rate(P, pi):
     eps = 1e-15
     return -torch.sum(pi.unsqueeze(1) * P * torch.log(P + eps)).float()
 
-def greedy(f, X, k):
+def distorted_greedy(f, c, U, m):
+    """
+    Distorted greedy with the set function f, cost c, ground set U.
+    """
     S = set()
-    plot_vals = []
-    for i in range(k):
-        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
-        gain, elem = max(gains)
-        if gain > 0: S.add(elem)
-        current_val = f(S)
-        print(f"Iteration {i+1}, S = {S}, Value = {current_val}")
-        plot_vals.append(current_val)
-    return plot_vals
+    for i in range(m):
+        best_gain = float('-inf')
+        best_e    = None
+        for e in (U - S):
+            gain = ((1 - 1/m)**(m - (i+1))) * (f(S | {e}) - f(S)) - c({e})
+            if gain>best_gain:
+                best_gain = gain
+                best_e    = e
+        if best_e is not None:
+            check_gain = ((1 - 1/m)**(m - (i+1))) * (f(S|{best_e})- f(S)) - c({best_e})
+            if check_gain>0:
+                S.add(best_e)
+    return S
 
 def plot_objective_per_iteration(f_values):
     plt.figure()
@@ -300,16 +315,15 @@ def plot_objective_per_iteration(f_values):
     plt.title("Entropy rate of the output against subset size", fontsize = 14)
     plt.xticks(range(1, len(f_values)+1))
     plt.grid(True)
-    plt.savefig("grdy.pdf")
+    plt.savefig("distgrdy.pdf")
     plt.show()
 # -----------------------
 # MAIN
 # -----------------------
 if __name__ == "__main__":
-    # Parameters for product state space:
     N = 10
-    d = 11  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [15]  # sum = 10+15=25 > N=10.
+    d = 11
+    l_values = [1]*(d-1) + [10]
     s = 1
 
     # Generate Markov chain with vectorized operations:
@@ -318,11 +332,26 @@ if __name__ == "__main__":
     base_entropy = compute_entropy_rate(P, pi).item()
     print(f"Entropy rate of full chain = {base_entropy}")
 
-    def submod_func(S):
-        _, pi_S, P_S = keep_S_in_mat(P, state_space, pi, S)
-        return compute_entropy_rate(P_S, pi_S).item()
+    def modular_func(S):
+        val = 0.0
+        for e in S:
+            _, pi_minus, P_minus = leave_S_out_mat(P, state_space, pi, {e})
+            val += compute_entropy_rate(P_minus, pi_minus).item() - base_entropy
+        return val
 
-    U = set(range(d-1))
-    f_values = greedy(submod_func, U, d-1)
-    print("Objective values:", f_values)
+    def submod_func(S):
+        _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
+        return compute_entropy_rate(PS, piS).item() + modular_func(S)
+
+    U = set(range(d - 1))
+    f_values = []
+
+    for m in range(1, d):
+        chosen_subset = distorted_greedy(submod_func, modular_func, U, m)
+        f_val = submod_func(chosen_subset) - modular_func(chosen_subset)
+        f_values.append(f_val)
+        print(f"Cardinality constraint {m}; Subset chosen: {chosen_subset}; Value: {f_val}")
+
+    print("Objective Values:", f_values)
+
     plot_objective_per_iteration(f_values)

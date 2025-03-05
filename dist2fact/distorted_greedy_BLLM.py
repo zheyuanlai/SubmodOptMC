@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-"""
-Optimized GPU-enabled version using precomputed lookup tables and vectorized operations.
-Free coordinates are binary (0 or 1) and the full state is formed by appending x_d = N - sum(x).
-"""
-
 import torch
 import numpy as np
 import math
@@ -276,53 +270,124 @@ def keep_S_in_mat(P, state_space, pi, S):
     P_S = torch.tensor(P_S_np_final, dtype=torch.float32, device=device)
     return partial_list, pi_S, P_S
 
+def leave_S_out_mat(P, state_space, pi, S):
+    #d = len(state_space[0])
+    Sbar = set(range(state_space.shape[1])) - set(S)
+    return keep_S_in_mat(P, state_space, pi, Sbar)
+
+# -----------------------------------------------------------------------
+#  Entropy Rate
+# -----------------------------------------------------------------------
 def compute_entropy_rate(P, pi):
-    eps = 1e-15
-    return -torch.sum(pi.unsqueeze(1) * P * torch.log(P + eps)).float()
+    """
+    H(P) = - sum_{x,y} pi[x]*P[x,y]*log(P[x,y]).
+    """
+    pi_64 = pi.double()
+    P_64  = P.double()
+    val = -torch.sum(pi_64.unsqueeze(1)* P_64 * torch.log(P_64 + 1e-15))
+    return val.float()
+
+def KL_divergence_gpu(pi, P, Q):
+    """
+    Computes the Kullback-Leibler divergence KL(P||Q) on the GPU.
+    P and Q are torch tensors (transition matrices).
+    KL(P||Q) = sum_x pi[x] * sum_y P[x,y] * log(P[x,y]/Q[x,y]),
+    where pi is the stationary distribution of P.
+    """
+    kl = torch.sum(pi.unsqueeze(1) * P * torch.log((P + 1e-10) / (Q + 1e-10)))
+    return kl
+
+def compute_outer_product_gpu(A, B):
+    """
+    Computes the outer (Kronecker) product of matrices A and B on the GPU.
+    Uses torch.kron for efficiency.
+    """
+    return torch.kron(A, B)
+
+# -----------------------------------------------------------------------
+#  Distorted Greedy
+# -----------------------------------------------------------------------
+def distorted_greedy(f, c, U, m):
+    """
+    Distorted greedy with the set function f, cost c, ground set U.
+    """
+    S = set()
+    for i in range(m):
+        best_gain = float('-inf')
+        best_e    = None
+        for e in (U - S):
+            gain = ((1 - 1/m)**(m - (i+1))) * (f(S | {e}) - f(S)) - c({e})
+            if gain>best_gain:
+                best_gain = gain
+                best_e    = e
+        if best_e is not None and best_gain > 0:
+            S.add(best_e)
+
+    return S
 
 def greedy(f, X, k):
     S = set()
-    plot_vals = []
     for i in range(k):
         gains = [(f(S.union({e})) - f(S), e) for e in X - S]
         gain, elem = max(gains)
         if gain > 0: S.add(elem)
-        current_val = f(S)
-        print(f"Iteration {i+1}, S = {S}, Value = {current_val}")
-        plot_vals.append(current_val)
-    return plot_vals
+    return S
 
 def plot_objective_per_iteration(f_values):
-    plt.figure()
-    plt.plot(range(1, len(f_values)+1), f_values, marker='o')
-    plt.xlabel("Subset size", fontsize = 16)
-    plt.ylabel("Entropy rate", fontsize = 16)
-    plt.title("Entropy rate of the output against subset size", fontsize = 14)
-    plt.xticks(range(1, len(f_values)+1))
+    """
+    f_values: list of submod function values over iterations.
+    """
+    iters = range(1, len(f_values)+1)
+    plt.figure(figsize=(6,4))
+    plt.plot(iters, f_values, marker='o')
+    plt.title("Entropy rate of output of distorted greedy against subset size")
+    plt.ylabel("Entropy rate")
+    plt.xlabel("Subset size")
     plt.grid(True)
-    plt.savefig("grdy.pdf")
     plt.show()
-# -----------------------
-# MAIN
-# -----------------------
-if __name__ == "__main__":
-    # Parameters for product state space:
-    N = 10
-    d = 11  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [15]  # sum = 10+15=25 > N=10.
+
+# -----------------------------------------------------------------------
+#  MAIN
+# -----------------------------------------------------------------------
+if __name__=="__main__":
+    N = 5
+    d = N + 1  # free coordinates = d-1 = 10
+    l_values = [1]*(d-1) + [N]  # sum = 10+15=25 > N=10.
     s = 1
 
     # Generate Markov chain with vectorized operations:
     state_space, pi, P = torch_MC_generation_vec(N, d, l_values, s, product_form=True)
     print(f"Generated chain with product state space of dimension {d-1} (total states = {state_space.shape[0]})")
-    base_entropy = compute_entropy_rate(P, pi).item()
-    print(f"Entropy rate of full chain = {base_entropy}")
 
-    def submod_func(S):
-        _, pi_S, P_S = keep_S_in_mat(P, state_space, pi, S)
-        return compute_entropy_rate(P_S, pi_S).item()
+    def f(S):
+        _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
+        _, piSbar, PSbar = leave_S_out_mat(P, state_space, pi, S)
+        return KL_divergence_gpu(pi, P, compute_outer_product_gpu(PS, PSbar))
+    
+    def c(S):
+        val = 0.0
+        for e in S:
+            _, pi_minus, P_minus = leave_S_out_mat(P, state_space, pi, {e})
+            _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {e})
+            val += KL_divergence_gpu(pi, P, compute_outer_product_gpu(P_minus, P_e))
+        return val
 
-    U = set(range(d-1))
-    f_values = greedy(submod_func, U, d-1)
-    print("Objective values:", f_values)
-    plot_objective_per_iteration(f_values)
+    def g(S):
+        return f(S) + c(S)
+
+    U = set(range(d - 1))
+    f_values = []
+    print(f({1, 2, 3, 4}))
+
+    for m in range(1, d):
+        chosen_subset = distorted_greedy(g, c, U, m)
+        greedy_subset = greedy(g, U, m)
+        f_val = f(chosen_subset)
+        f_values.append(f_val)
+        print(f"Cardinality constraint {m}; Greedy Subset chosen: {greedy_subset}; Value: {f(greedy_subset)}")
+        print(f"Cardinality constraint {m}; Subset chosen: {chosen_subset}; Value: {f_val}")
+
+    print(f"\nDistorted Greedy finished. Subset chosen = {chosen_subset}")
+    print("f-values:", f_values)
+
+    #plot_objective_per_iteration(f_values)
