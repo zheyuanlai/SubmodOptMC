@@ -1,0 +1,23 @@
+Greedy vs Distorted Greedy (Entropy Rate)
+Generated state space with 1024 states (dimension = 10).
+Entropy rate of full chain = 0.3934893012046814
+Cardinality constraint 1; Greedy subset chosen: {9}; Value: 0.05069255828857422
+Cardinality constraint 1; Distorted Greedy subset chosen: {0}; Value: 0.05069255828857422
+Cardinality constraint 2; Greedy subset chosen: {8, 9}; Value: 0.08951091021299362
+Cardinality constraint 2; Distorted Greedy subset chosen: {0, 1}; Value: 0.08951091021299362
+Cardinality constraint 3; Greedy subset chosen: {8, 9, 7}; Value: 0.1290052980184555
+Cardinality constraint 3; Distorted Greedy subset chosen: {0, 1, 2}; Value: 0.1290052980184555
+Cardinality constraint 4; Greedy subset chosen: {8, 9, 6, 7}; Value: 0.16822472214698792
+Cardinality constraint 4; Distorted Greedy subset chosen: {0, 1, 2, 3}; Value: 0.16822472214698792
+Cardinality constraint 5; Greedy subset chosen: {5, 6, 7, 8, 9}; Value: 0.20722928643226624
+Cardinality constraint 5; Distorted Greedy subset chosen: {0, 1, 2, 3, 4}; Value: 0.20722928643226624
+Cardinality constraint 6; Greedy subset chosen: {4, 5, 6, 7, 8, 9}; Value: 0.24579183757305145
+Cardinality constraint 6; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5}; Value: 0.24579183757305145
+Cardinality constraint 7; Greedy subset chosen: {3, 4, 5, 6, 7, 8, 9}; Value: 0.2838687598705292
+Cardinality constraint 7; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 8}; Value: 0.2838687598705292
+Cardinality constraint 8; Greedy subset chosen: {2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3213552236557007
+Cardinality constraint 8; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 8, 9}; Value: 0.3213552236557007
+Cardinality constraint 9; Greedy subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3581136465072632
+Cardinality constraint 9; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 8, 9}; Value: 0.3581136465072632
+Cardinality constraint 10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3934893012046814
+Cardinality constraint 10; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3934893012046814

@@ -1,7 +1,3 @@
-
-
-### REVISED CASE OF PRODUCT FORM BERNOULLI-LAPLACE LEVEL MODEL
-
 Greedy (dim=10) - Entropy rate
 Using CUDA device
 Generated chain with product state space of dimension 10 (total states = 1024)
@@ -33,6 +29,20 @@ Cardinality constraint 8; Subset chosen: {0, 1, 2, 3, 4, 5, 6, 7}; Value: 2.4545
 Cardinality constraint 9; Subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 2.518968105316162
 Cardinality constraint 10; Subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 2.518968105316162
 Objective values: [0.4609358310699463, 0.8357340693473816, 1.1811633110046387, 1.5070604085922241, 1.8019261360168457, 2.0610506534576416, 2.283281087875366, 2.4545323848724365, 2.518968105316162, 2.518968105316162]
+
+Generalized Distorted Greedy (d = 10, k = 3, V1 = {0, 1, 2, 3}, V2 = {4, 5, 6}, V3 = {7, 8, 9})
+Generated chain with product state space of dimension 10 (total states = 1024)
+Entropy rate of full chain = 1.9606833457946777
+Cardinality constraint 1; Subset chosen: [set(), set(), {9}]; Value: 0.46093589067459106
+Cardinality constraint 2; Subset chosen: [set(), {6}, {9}]; Value: 0.9004646241664886
+Cardinality constraint 3; Subset chosen: [set(), {6}, {8, 7}]; Value: 1.2696625888347626
+Cardinality constraint 4; Subset chosen: [{3}, {6}, {8, 7}]; Value: 1.7007201611995697
+Cardinality constraint 5; Subset chosen: [{3}, {4, 6}, {8, 7}]; Value: 2.086920440196991
+Cardinality constraint 6; Subset chosen: [{3}, {5, 4, 6}, {8, 7}]; Value: 2.4303470253944397
+Cardinality constraint 7; Subset chosen: [{3}, {5, 4, 6}, {8, 9, 7}]; Value: 2.7140536308288574
+Cardinality constraint 8; Subset chosen: [{2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 3.104512393474579
+Cardinality constraint 9; Subset chosen: [{0, 1, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 3.462669849395752
+Cardinality constraint 10; Subset chosen: [{0, 1, 3, 2}, {5, 4, 6}, {8, 9, 7}]; Value: 3.7896838188171387
 
 Greedy and Distorted Greedy (dim=10) - Distance to factorizability
 Generated chain with product state space of dimension 10 (total states = 1024)
