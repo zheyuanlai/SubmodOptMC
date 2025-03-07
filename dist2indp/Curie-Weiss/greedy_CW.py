@@ -14,7 +14,7 @@ import torch
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from itertools import product
+from itertools import product, combinations
 
 # ---- Device selection ----
 if torch.backends.mps.is_available():

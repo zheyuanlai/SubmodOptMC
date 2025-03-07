@@ -14,7 +14,7 @@ import torch
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from itertools import product
+from itertools import product, combinations
 
 # ---- Device selection ----
 if torch.backends.mps.is_available():
@@ -211,7 +211,7 @@ if __name__ == "__main__":
     # Parameters for the Curie–Weiss model:
     d = 5            # number of spins
     beta = 0.1        # inverse temperature
-    h = 0.0           # external magnetic field
+    h = 0.2           # external magnetic field
     # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
 
     state_space = get_product_state_space(d)
@@ -243,3 +243,5 @@ if __name__ == "__main__":
         greedy_subset = greedy(f, U, m)
         print(f"Cardinality constraint {m}; Greedy subset chosen: {greedy_subset}; Value: {f(greedy_subset)}")
         print(f"Cardinality constraint {m}; Distorted Greedy subset chosen: {distorted_subset}; Value: {f(distorted_subset)}")
+        all_subsets = [set(combination) for combination in combinations(range(d), m)]
+        print(f"All entropy rates: {[f(S) for S in all_subsets]} \n\n")
