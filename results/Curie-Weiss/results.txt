@@ -1,23 +1,37 @@
 Greedy vs Distorted Greedy (Entropy Rate)
 Generated state space with 1024 states (dimension = 10).
-Entropy rate of full chain = 0.3934893012046814
-Cardinality constraint 1; Greedy subset chosen: {9}; Value: 0.05069255828857422
-Cardinality constraint 1; Distorted Greedy subset chosen: {0}; Value: 0.05069255828857422
-Cardinality constraint 2; Greedy subset chosen: {8, 9}; Value: 0.08951091021299362
-Cardinality constraint 2; Distorted Greedy subset chosen: {0, 1}; Value: 0.08951091021299362
-Cardinality constraint 3; Greedy subset chosen: {8, 9, 7}; Value: 0.1290052980184555
-Cardinality constraint 3; Distorted Greedy subset chosen: {0, 1, 2}; Value: 0.1290052980184555
-Cardinality constraint 4; Greedy subset chosen: {8, 9, 6, 7}; Value: 0.16822472214698792
-Cardinality constraint 4; Distorted Greedy subset chosen: {0, 1, 2, 3}; Value: 0.16822472214698792
-Cardinality constraint 5; Greedy subset chosen: {5, 6, 7, 8, 9}; Value: 0.20722928643226624
-Cardinality constraint 5; Distorted Greedy subset chosen: {0, 1, 2, 3, 4}; Value: 0.20722928643226624
-Cardinality constraint 6; Greedy subset chosen: {4, 5, 6, 7, 8, 9}; Value: 0.24579183757305145
-Cardinality constraint 6; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5}; Value: 0.24579183757305145
-Cardinality constraint 7; Greedy subset chosen: {3, 4, 5, 6, 7, 8, 9}; Value: 0.2838687598705292
-Cardinality constraint 7; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 8}; Value: 0.2838687598705292
-Cardinality constraint 8; Greedy subset chosen: {2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3213552236557007
-Cardinality constraint 8; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 8, 9}; Value: 0.3213552236557007
-Cardinality constraint 9; Greedy subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3581136465072632
-Cardinality constraint 9; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 8, 9}; Value: 0.3581136465072632
-Cardinality constraint 10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3934893012046814
-Cardinality constraint 10; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3934893012046814
+Entropy rate of full chain = 2.2910916805267334
+Cardinality constraint 1; Greedy subset chosen: {0}; Value: 0.29085153341293335
+Cardinality constraint 1; Distorted Greedy subset chosen: {0}; Value: 0.29085153341293335
+Cardinality constraint 2; Greedy subset chosen: {0, 9}; Value: 0.5737142562866211
+Cardinality constraint 2; Distorted Greedy subset chosen: {0, 9}; Value: 0.5737142562866211
+Cardinality constraint 3; Greedy subset chosen: {0, 9, 8}; Value: 0.8393315672874451
+Cardinality constraint 3; Distorted Greedy subset chosen: {0, 9, 8}; Value: 0.8393315672874451
+Cardinality constraint 4; Greedy subset chosen: {0, 9, 8, 1}; Value: 1.095702052116394
+Cardinality constraint 4; Distorted Greedy subset chosen: {0, 9, 8, 1}; Value: 1.095702052116394
+Cardinality constraint 5; Greedy subset chosen: {0, 1, 5, 8, 9}; Value: 1.3395304679870605
+Cardinality constraint 5; Distorted Greedy subset chosen: {0, 1, 5, 8, 9}; Value: 1.3395304679870605
+Cardinality constraint 6; Greedy subset chosen: {0, 1, 3, 5, 8, 9}; Value: 1.5709753036499023
+Cardinality constraint 6; Distorted Greedy subset chosen: {0, 1, 3, 5, 8, 9}; Value: 1.5709753036499023
+Cardinality constraint 7; Greedy subset chosen: {0, 1, 3, 5, 7, 8, 9}; Value: 1.7875714302062988
+Cardinality constraint 7; Distorted Greedy subset chosen: {0, 1, 3, 5, 7, 8, 9}; Value: 1.7875714302062988
+Cardinality constraint 8; Greedy subset chosen: {0, 1, 2, 3, 5, 7, 8, 9}; Value: 1.9850049018859863
+Cardinality constraint 8; Distorted Greedy subset chosen: {0, 1, 2, 3, 5, 6, 8, 9}; Value: 1.9845751523971558
+Cardinality constraint 9; Greedy subset chosen: {0, 1, 2, 3, 5, 6, 7, 8, 9}; Value: 2.1579272747039795
+Cardinality constraint 9; Distorted Greedy subset chosen: {0, 1, 2, 3, 5, 6, 7, 8, 9}; Value: 2.1579272747039795
+Cardinality constraint 10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 2.2910916805267334
+Cardinality constraint 10; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 2.2910916805267334
+
+Generalized Distorted Greedy (d = 10, k = 3, V1 = {0, 1, 2, 3}, V2 = {4, 5, 6}, V3 = {7, 8, 9}) - Entropy Rate
+Generated state space with 1024 states (dimension = 10).
+Entropy rate of full chain = 2.2910916805267334
+Cardinality constraint 1; Subset chosen: [{0}, set(), set()]; Value: 0.29085153341293335
+Cardinality constraint 2; Subset chosen: [{0}, {6}, set()]; Value: 0.5706741213798523
+Cardinality constraint 3; Subset chosen: [{0}, {6}, {9}]; Value: 0.8615246117115021
+Cardinality constraint 4; Subset chosen: [{0}, {4, 6}, {9}]; Value: 1.1331580579280853
+Cardinality constraint 5; Subset chosen: [{0}, {4, 6}, {8, 9}]; Value: 1.4073182940483093
+Cardinality constraint 6; Subset chosen: [{0}, {5, 4, 6}, {8, 9}]; Value: 1.6681586503982544
+Cardinality constraint 7; Subset chosen: [{0}, {5, 4, 6}, {8, 9, 7}]; Value: 1.9308961629867554
+Cardinality constraint 8; Subset chosen: [{0, 1}, {5, 4, 6}, {8, 9, 7}]; Value: 2.2050546407699585
+Cardinality constraint 9; Subset chosen: [{0, 1, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 2.468319892883301
+Cardinality constraint 10; Subset chosen: [{0, 2, 1, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 2.7201083302497864

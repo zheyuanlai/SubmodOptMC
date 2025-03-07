@@ -42,14 +42,20 @@ def get_product_state_space(d):
 # -----------------------
 # Hamiltonian computation
 # -----------------------
+
 def compute_hamiltonian(x, h):
     """
-    For a state x (tensor of shape (d,)), compute the Curie–Weiss Hamiltonian:
-         H(x) = - (sum(x)^2) - h * sum(x)
+    For a state x (tensor of shape (d,)), compute the Hamiltonian:
+        H(x) = - sum_{i=1}^d sum_{j=1}^d (1/2^{|j-i|}) * x_i * x_j - h * sum_{i=1}^d x_i 
     """
-    s = torch.sum(x).float()
-    return - (s * s) - h * s
-
+    d = x.shape[0]
+    indices = torch.arange(d, device=x.device)
+    diff = torch.abs(indices.unsqueeze(0) - indices.unsqueeze(1))
+    weights = 2.0 ** (-diff)
+    
+    interaction = torch.sum(weights * (x.unsqueeze(0) * x.unsqueeze(1)))
+    field = h * torch.sum(x)
+    return -interaction - field
 # -----------------------
 # Stationary distribution computation
 # -----------------------
@@ -211,8 +217,7 @@ if __name__ == "__main__":
     # Parameters for the Curie–Weiss model:
     d = 5            # number of spins
     beta = 0.1        # inverse temperature
-    h = 0.2           # external magnetic field
-    # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
+    h = 1           # external magnetic field
 
     state_space = get_product_state_space(d)
     print(f"Generated state space with {state_space.shape[0]} states (dimension = {d}).")

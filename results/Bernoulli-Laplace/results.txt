@@ -30,7 +30,7 @@ Cardinality constraint 9; Subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 2.5
 Cardinality constraint 10; Subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 2.518968105316162
 Objective values: [0.4609358310699463, 0.8357340693473816, 1.1811633110046387, 1.5070604085922241, 1.8019261360168457, 2.0610506534576416, 2.283281087875366, 2.4545323848724365, 2.518968105316162, 2.518968105316162]
 
-Generalized Distorted Greedy (d = 10, k = 3, V1 = {0, 1, 2, 3}, V2 = {4, 5, 6}, V3 = {7, 8, 9})
+Generalized Distorted Greedy (d = 10, k = 3, V1 = {0, 1, 2, 3}, V2 = {4, 5, 6}, V3 = {7, 8, 9}) - Entropy Rate
 Generated chain with product state space of dimension 10 (total states = 1024)
 Entropy rate of full chain = 1.9606833457946777
 Cardinality constraint 1; Subset chosen: [set(), set(), {9}]; Value: 0.46093589067459106
