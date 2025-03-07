@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from itertools import product
+from itertools import product, combinations
 
 # ---- Device selection ----
 """
@@ -350,7 +350,7 @@ def plot_objective_per_iteration(f_values):
 #  MAIN
 # -----------------------------------------------------------------------
 if __name__=="__main__":
-    N = 10
+    N = 5
     d = N + 1  # free coordinates = d-1 = 10
     l_values = [1]*(d-1) + [N]  # sum = 10+15=25 > N=10.
     s = 1
@@ -382,3 +382,5 @@ if __name__=="__main__":
         greedy_subset = greedy(f, U, m)
         print(f"Cardinality constraint {m}; Greedy subset chosen: {greedy_subset}; Value: {f(greedy_subset)}")
         print(f"Cardinality constraint {m}; Distorted Greedy subset chosen: {distorted_subset}; Value: {f(distorted_subset)}")
+        all_subsets = [set(combination) for combination in combinations(range(d - 1), m)]
+        print(f"All entropy rates: {[f(S) for S in all_subsets]}\n")

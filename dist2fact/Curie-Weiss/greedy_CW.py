@@ -14,7 +14,7 @@ import torch
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from itertools import product
+from itertools import product, combinations
 
 # ---- Device selection ----
 if torch.backends.mps.is_available():
@@ -44,11 +44,17 @@ def get_product_state_space(d):
 # -----------------------
 def compute_hamiltonian(x, h):
     """
-    For a state x (tensor of shape (d,)), compute the Curie–Weiss Hamiltonian:
-         H(x) = - (sum(x)^2) - h * sum(x)
+    For a state x (tensor of shape (d,)), compute the Hamiltonian:
+        H(x) = - sum_{i=1}^d sum_{j=1}^d (1/2^{|j-i|}) * x_i * x_j - h * sum_{i=1}^d x_i 
     """
-    s = torch.sum(x).float()
-    return - (s * s) - h * s
+    d = x.shape[0]
+    indices = torch.arange(d, device=x.device)
+    diff = torch.abs(indices.unsqueeze(0) - indices.unsqueeze(1))
+    weights = 2.0 ** (-diff)
+    
+    interaction = torch.sum(weights * (x.unsqueeze(0) * x.unsqueeze(1)))
+    field = h * torch.sum(x)
+    return -interaction - field
 
 # -----------------------
 # Stationary distribution computation
@@ -228,7 +234,7 @@ if __name__ == "__main__":
     # Parameters for the Curie–Weiss model:
     d = 5            # number of spins
     beta = 0.1        # inverse temperature
-    h = 0.0           # external magnetic field
+    h = 1           # external magnetic field
     # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
 
     state_space = get_product_state_space(d)
@@ -261,3 +267,5 @@ if __name__ == "__main__":
         greedy_subset = greedy(f, U, m)
         print(f"Cardinality constraint {m}; Greedy subset chosen: {greedy_subset}; Value: {f(greedy_subset)}")
         print(f"Cardinality constraint {m}; Distorted Greedy subset chosen: {distorted_subset}; Value: {f(distorted_subset)}")
+        all_subsets = [set(combination) for combination in combinations(range(d), m)]
+        print(f"All entropy rates: {[f(S) for S in all_subsets]}\n")
