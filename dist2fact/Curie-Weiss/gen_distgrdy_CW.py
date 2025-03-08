@@ -184,6 +184,24 @@ def compute_outer_product_gpu(A, B):
     """
     return torch.kron(A, B)
 
+def outer_product_list(matrices):
+    """
+    Computes the outer (Kronecker) product of a list of matrices using torch.kron.
+    
+    Parameters:
+        matrices (list of torch.Tensor): List of matrices.
+        
+    Returns:
+        torch.Tensor: The Kronecker product of all matrices.
+    """
+    if not matrices:
+        raise ValueError("The list of matrices is empty.")
+    
+    result = matrices[0]
+    for mat in matrices[1:]:
+        result = torch.kron(result, mat)
+    return result
+
 def greedy(f, X, k):
     """
     Greedy algorithm that iteratively selects elements from X (coordinates)
@@ -216,6 +234,47 @@ def distorted_greedy(f, c, U, m):
 
     return S
 
+def distorted_greedy_k_submod(g, c, V, m, k):
+    """
+    Generalized distorted greedy for k-submodular optimization:
+    We want to approximately maximize f(S) = g(S) - c(S),
+    where g is k-submodular & monotone, c is a nonnegative modular function,
+    S = (S[0], ..., S[k-1]) with S[j] ⊆ V[j].
+    V is a list/tuple: V[j] is the "universe" for the j-th coordinate.
+    m is total cardinality bound: sum_j |S[j]| ≤ m.
+    """
+    S = [set() for _ in range(k)]
+
+    for i in range(m):
+        best_gain = float('-inf')
+        best_j    = None
+        best_e    = None
+
+        factor = (1.0 - 1.0/m)**(m - (i+1))
+
+        for j in range(k):
+            for e in (V[j] - S[j]):
+                old_g = g(S)
+                old_c = c(S)
+                S[j].add(e)
+                new_g = g(S)
+                new_c = c(S)
+                S[j].remove(e)
+
+                inc_g = new_g - old_g
+                cost_e = new_c - old_c
+                gain = factor*inc_g - cost_e
+
+                if gain > best_gain:
+                    best_gain = gain
+                    best_j = j
+                    best_e = e
+
+        if best_gain > 0:
+            S[best_j].add(best_e)
+
+    return S
+
 def plot_objective_per_iteration(f_values):
     plt.figure()
     plt.plot(range(1, len(f_values)+1), f_values, marker='o')
@@ -237,35 +296,55 @@ if __name__ == "__main__":
     h = 1           # external magnetic field
     # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
 
+    k = 3
+    V = [
+        set([0, 1]),
+        set([2]),
+        set([3, 4])
+    ]
+
     state_space = get_product_state_space(d)
     P = compute_transition_matrix(state_space, beta, h)
     print(f"Generated state space with {state_space.shape[0]} states (dimension = {d}).")
 
     pi = stat_dist_MC_generation(state_space, beta, h)
-    base_entropy = compute_entropy_rate(compute_transition_matrix(state_space, beta, h), pi).item()
-    print(f"Entropy rate of full chain = {base_entropy}")
 
     def f(S):
-        _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
-        _, piSbar, PSbar = leave_S_out_mat(P, state_space, pi, S)
-        return KL_divergence_gpu(pi, P, compute_outer_product_gpu(PS, PSbar))
-    
+        coords = []
+        for j, Sj in enumerate(S):
+            _, piSj, PSj = keep_S_in_mat(P, state_space, pi, Sj)
+            coords.append(PSj)
+        PS_full = outer_product_list(coords)
+        _, piS_remains, PS_remains = keep_S_in_mat(P, state_space, pi, set(range(d)) - set.union(*S))
+        return KL_divergence_gpu(pi, P, compute_outer_product_gpu(PS_full, PS_remains))
+        
     def c(S):
-        val = 0.0
-        for e in S:
-            _, pi_minus, P_minus = leave_S_out_mat(P, state_space, pi, {e})
-            _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {e})
-            val += KL_divergence_gpu(pi, P, compute_outer_product_gpu(P_minus, P_e))
-        return val
+        cost = 0.0
+        full_set = set(range(d))
+        A = set().union(*V)
+        Ac = full_set - A
+        for i, S_i in enumerate(S):
+            V_i = V[i]
+            _, pi_Vi, P_Vi = keep_S_in_mat(P, state_space, pi, V_i)
+            for e in S_i:
+                V_i_minus_e = V_i - {e}
+                _, pi_Vi_minus_e, P_Vi_minus_e = keep_S_in_mat(P, state_space, pi, V_i_minus_e)
+                _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {e})
+                Q1 = compute_outer_product_gpu(P_Vi_minus_e, P_e)
+                KL1 = KL_divergence_gpu(pi_Vi, P_Vi, Q1)
+                
+                Ac_e = Ac | {e}
+                _, pi_Ac, P_Ac = keep_S_in_mat(P, state_space, pi, Ac)
+                _, pi_Ac_e, P_Ac_e = keep_S_in_mat(P, state_space, pi, Ac_e)
+                Q2 = compute_outer_product_gpu(P_Ac, P_e)
+                KL2 = KL_divergence_gpu(pi_Ac_e, P_Ac_e, Q2)
+                
+                cost += (KL1 - KL2)
+        return cost
 
     def g(S):
         return f(S) + c(S)
 
-    U = set(range(d))
     for m in range(1, d + 1):
-        distorted_subset = distorted_greedy(g, c, U, m)
-        greedy_subset = greedy(f, U, m)
-        print(f"Cardinality constraint {m}; Greedy subset chosen: {greedy_subset}; Value: {f(greedy_subset)}")
-        print(f"Cardinality constraint {m}; Distorted Greedy subset chosen: {distorted_subset}; Value: {f(distorted_subset)}")
-        all_subsets = [set(combination) for combination in combinations(range(d), m)]
-        print(f"All entropy rates: {[(S, f(S)) for S in all_subsets]}\n")
+        S = distorted_greedy_k_submod(g, c, V, m, k)
+        print(f"Cardinality constraint {m}; Subset chosen: {S}; Value: {f(S)}")

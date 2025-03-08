@@ -230,7 +230,7 @@ def torch_MC_generation_vec(N, d, l_values, s, product_form=True):
         A_n = torch.matmul(M_n, M_n.t())
         A += beta_n * A_n
     A = torch.clamp(A, min=0.0)
-    P = A * pi.unsqueeze(0)  # weight columns by pi
+    P = A * pi.unsqueeze(0)
     P = P / (P.sum(dim=1, keepdim=True) + 1e-15)
     P = torch.clamp(P, min=0.0)
     P = P / (P.sum(dim=1, keepdim=True) + 1e-15)
@@ -351,11 +351,10 @@ def plot_objective_per_iteration(f_values):
 # -----------------------------------------------------------------------
 if __name__=="__main__":
     N = 5
-    d = N + 1  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [N]  # sum = 10+15=25 > N=10.
+    d = N + 1
+    l_values = [1]*(d-1) + [N]
     s = 1
 
-    # Generate Markov chain with vectorized operations:
     state_space, pi, P = torch_MC_generation_vec(N, d, l_values, s, product_form=True)
     print(f"Generated chain with product state space of dimension {d-1} (total states = {state_space.shape[0]})")
 
@@ -383,4 +382,4 @@ if __name__=="__main__":
         print(f"Cardinality constraint {m}; Greedy subset chosen: {greedy_subset}; Value: {f(greedy_subset)}")
         print(f"Cardinality constraint {m}; Distorted Greedy subset chosen: {distorted_subset}; Value: {f(distorted_subset)}")
         all_subsets = [set(combination) for combination in combinations(range(d - 1), m)]
-        print(f"All entropy rates: {[f(S) for S in all_subsets]}\n")
+        print(f"All: {[(S, f(S)) for S in all_subsets]}\n")
