@@ -48,3 +48,16 @@ Cardinality constraint 4; Greedy subset chosen: {8, 1, 4, 5}; Value: 0.345897644
 Cardinality constraint 4; Distorted Greedy subset chosen: {1, 6, 9}; Value: 0.3090513348579407
 Cardinality constraint 5; Greedy subset chosen: {1, 2, 4, 5, 8}; Value: 0.35757923126220703
 Cardinality constraint 5; Distorted Greedy subset chosen: {9, 2, 5, 1}; Value: 0.3458956182003021
+
+Generalized Distorted Greedy (Distance to Factorizability, V1 = {0, 1, 2, 3}, V2 = {4, 5, 6}, V3 = {7, 8, 9})
+Generated state space with 1024 states (dimension = 10).
+Cardinality constraint 1; Subset chosen: [set(), {5}, set()]; Value: 0.14835664629936218
+Cardinality constraint 2; Subset chosen: [set(), {6}, {7}]; Value: 0.25388476252555847
+Cardinality constraint 3; Subset chosen: [{3}, {6}, {7}]; Value: 0.33529484272003174
+Cardinality constraint 4; Subset chosen: [{3}, {4, 6}, {7}]; Value: 0.39056310057640076
+Cardinality constraint 5; Subset chosen: [{1, 3}, {4, 6}, {7}]; Value: 0.4310355484485626
+Cardinality constraint 6; Subset chosen: [{1, 3}, {4, 6}, {9, 7}]; Value: 0.4597824215888977
+Cardinality constraint 7; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
+Cardinality constraint 8; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
+Cardinality constraint 9; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
+Cardinality constraint 10; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
