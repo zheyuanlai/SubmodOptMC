@@ -226,7 +226,7 @@ if __name__ == "__main__":
     # Parameters for the Curie–Weiss model:
     d = 5            # number of spins
     beta = 0.1        # inverse temperature
-    h = 0.0           # external magnetic field
+    h = 1           # external magnetic field
     # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
 
     state_space = get_product_state_space(d)

@@ -79,3 +79,34 @@ Cardinality constraint 7; Subset chosen: [set(), set(), {9}]; Value: 3.171799421
 Cardinality constraint 8; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
 Cardinality constraint 9; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
 Cardinality constraint 10; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+
+Greedy vs Distorted Greedy (dim=10) - Distance to independence
+Generated chain with product state space of dimension 10 (total states = 1024)
+m=2; Greedy subset chosen: {0, 9}; Value: 0.051401376724243164
+m=2; Distorted Greedy subset chosen: {0, 1}; Value: 0.034059762954711914
+m=3; Greedy subset chosen: {0, 9, 1}; Value: 0.1350466012954712
+m=3; Distorted Greedy subset chosen: {0, 1, 2}; Value: 0.10318148136138916
+m=4; Greedy subset chosen: {0, 9, 2, 1}; Value: 0.24988603591918945
+m=4; Distorted Greedy subset chosen: {0, 1, 2, 3}; Value: 0.20793282985687256
+m=5; Greedy subset chosen: {0, 1, 2, 3, 9}; Value: 0.3970087766647339
+m=5; Distorted Greedy subset chosen: {0, 1, 2, 3, 4}; Value: 0.34752750396728516
+m=6; Greedy subset chosen: {0, 1, 2, 3, 4, 9}; Value: 0.575232744216919
+m=6; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5}; Value: 0.5244119167327881
+m=7; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 9}; Value: 0.7891061305999756
+m=7; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6}; Value: 0.7417101860046387
+m=8; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 9}; Value: 1.0509438514709473
+m=8; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7}; Value: 1.015756368637085
+m=9; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 1.4122564792633057
+m=9; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 1.4122564792633057
+m=10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 2.4182519912719727
+m=10; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 2.4182519912719727
+
+Generalized Distorted Greedy (dim=10) - Distance to independence
+Generated chain with product state space of dimension 10 (total states = 1024)
+Cardinality constraint 4; Subset chosen: [{0, 1}, {4}, {7}]; Value: 0.034059762954711914
+Cardinality constraint 5; Subset chosen: [{0, 1}, {5, 4}, {7}]; Value: 0.07998931407928467
+Cardinality constraint 6; Subset chosen: [{0, 1}, {5, 4}, {8, 7}]; Value: 0.1428636908531189
+Cardinality constraint 7; Subset chosen: [{0, 1, 2}, {5, 4}, {8, 7}]; Value: 0.21198540925979614
+Cardinality constraint 8; Subset chosen: [{0, 1, 2}, {5, 4, 6}, {8, 7}]; Value: 0.3072708249092102
+Cardinality constraint 9; Subset chosen: [{0, 1, 2, 3}, {5, 4, 6}, {8, 7}]; Value: 0.4120221734046936
+Cardinality constraint 10; Subset chosen: [{0, 1, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 0.5892515182495117

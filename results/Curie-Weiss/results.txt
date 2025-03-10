@@ -61,3 +61,35 @@ Cardinality constraint 7; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.4
 Cardinality constraint 8; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
 Cardinality constraint 9; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
 Cardinality constraint 10; Subset chosen: [{1, 3}, {5, 4, 6}, {9, 7}]; Value: 0.46886539459228516
+
+Greedy vs Distorted Greedy (dim=10) - Distance to independence
+Using CPU device
+Generated state space with 1024 states (dimension = 10).
+m=2; Greedy subset chosen: {9, 3}; Value: 0.007566332817077637
+m=2; Distorted Greedy subset chosen: {0, 6}; Value: 0.007567942142486572
+m=3; Greedy subset chosen: {9, 3, 6}; Value: 0.02350139617919922
+m=3; Distorted Greedy subset chosen: {0, 9, 5}; Value: 0.023980796337127686
+m=4; Greedy subset chosen: {9, 3, 6, 1}; Value: 0.048885345458984375
+m=4; Distorted Greedy subset chosen: {0, 9, 4, 6}; Value: 0.04961264133453369
+m=5; Greedy subset chosen: {1, 3, 5, 6, 9}; Value: 0.0859222412109375
+m=5; Distorted Greedy subset chosen: {0, 2, 4, 6, 9}; Value: 0.08590686321258545
+m=6; Greedy subset chosen: {1, 3, 5, 6, 7, 9}; Value: 0.13554608821868896
+m=6; Distorted Greedy subset chosen: {0, 2, 4, 6, 7, 9}; Value: 0.13532626628875732
+m=7; Greedy subset chosen: {1, 2, 3, 5, 6, 7, 9}; Value: 0.19989407062530518
+m=7; Distorted Greedy subset chosen: {0, 2, 3, 4, 6, 7, 9}; Value: 0.20016849040985107
+m=8; Greedy subset chosen: {1, 2, 3, 4, 5, 6, 7, 9}; Value: 0.2835555076599121
+m=8; Distorted Greedy subset chosen: {0, 2, 3, 4, 5, 6, 7, 9}; Value: 0.2839862108230591
+m=9; Greedy subset chosen: {1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.3910212516784668
+m=9; Distorted Greedy subset chosen: {0, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.39191317558288574
+m=10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.5381250381469727
+m=10; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.5381250381469727
+
+Generalized Distorted Greedy (dim=10) - Distance to independence
+Generated state space with 1024 states (dimension = 10).
+Cardinality constraint 4; Subset chosen: [{0}, {4, 6}, {7}]; Value: 0.007776319980621338
+Cardinality constraint 5; Subset chosen: [{0, 3}, {4, 6}, {7}]; Value: 0.015561938285827637
+Cardinality constraint 6; Subset chosen: [{0, 3}, {4, 6}, {9, 7}]; Value: 0.023759841918945312
+Cardinality constraint 7; Subset chosen: [{0, 2, 3}, {4, 6}, {9, 7}]; Value: 0.041718244552612305
+Cardinality constraint 8; Subset chosen: [{0, 2, 3}, {5, 4, 6}, {9, 7}]; Value: 0.06028717756271362
+Cardinality constraint 9; Subset chosen: [{0, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 0.0797167420387268
+Cardinality constraint 10; Subset chosen: [{0, 1, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 0.109108567237854
