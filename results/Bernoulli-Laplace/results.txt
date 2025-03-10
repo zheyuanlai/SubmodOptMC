@@ -66,3 +66,16 @@ Cardinality constraint 9; Greedy subset chosen: {9}; Value: 3.1715404987335205
 Cardinality constraint 9; Distorted Greedy subset chosen: {9}; Value: 3.1715404987335205
 Cardinality constraint 10; Greedy subset chosen: {9}; Value: 3.1715404987335205
 Cardinality constraint 10; Distorted Greedy subset chosen: {9}; Value: 3.1715404987335205
+
+Generalized Distorted Greedy (dim=10) - Distance to factorizability
+Generated chain with product state space of dimension 10 (total states = 1024)
+Cardinality constraint 1; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 2; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 3; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 4; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 5; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 6; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 7; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 8; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 9; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425
+Cardinality constraint 10; Subset chosen: [set(), set(), {9}]; Value: 3.171799421310425

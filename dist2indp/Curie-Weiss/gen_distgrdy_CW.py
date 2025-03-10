@@ -184,28 +184,44 @@ def compute_outer_product_gpu(A, B):
     """
     return torch.kron(A, B)
 
-def distorted_greedy(f, c, U, m):
+def distorted_greedy_k_submod(g, c, V, m, k):
     """
-    Distorted greedy with the set function f, cost c, ground set U.
+    Generalized distorted greedy for k-submodular optimization:
+    We want to approximately maximize f(S) = g(S) - c(S),
+    where g is k-submodular & monotone, c is a nonnegative modular function,
+    S = (S[0], ..., S[k-1]) with S[j] ⊆ V[j].
+    V is a list/tuple: V[j] is the "universe" for the j-th coordinate.
+    m is total cardinality bound: sum_j |S[j]| ≤ m.
     """
-    S = set()
+    S = [set() for _ in range(k)]
+
     for i in range(m):
         best_gain = float('-inf')
+        best_j    = None
         best_e    = None
-        for e in (U - S):
-            gain = ((1 - 1/m)**(m - (i+1))) * (f(S | {e}) - f(S)) - c({e})
-            if gain>best_gain:
-                best_gain = gain
-                best_e    = e
-        S.add(best_e)
-    return S
 
-def greedy(f, X, k):
-    S = set()
-    for i in range(k):
-        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
-        gain, elem = max(gains)
-        S.add(elem)
+        factor = (1.0 - 1.0/m)**(m - (i+1))
+
+        for j in range(k):
+            for e in (V[j] - S[j]):
+                old_g = g(S)
+                old_c = c(S)
+                S[j].add(e)
+                new_g = g(S)
+                new_c = c(S)
+                S[j].remove(e)
+
+                inc_g = new_g - old_g
+                cost_e = new_c - old_c
+                gain = factor*inc_g - cost_e
+
+                if gain > best_gain:
+                    best_gain = gain
+                    best_j = j
+                    best_e = e
+
+        S[best_j].add(best_e)
+
     return S
 
 def plot_objective_per_iteration(f_values):
@@ -226,39 +242,51 @@ if __name__ == "__main__":
     # Parameters for the Curie–Weiss model:
     d = 5            # number of spins
     beta = 0.1        # inverse temperature
-    h = 0.0           # external magnetic field
+    h = 1           # external magnetic field
     # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
+
+    k = 3
+    V = [
+        set([0, 1]),
+        set([2]),
+        set([3, 4])
+    ]
 
     state_space = get_product_state_space(d)
     pi = stat_dist_MC_generation(state_space, beta, h)
     P = compute_transition_matrix(state_space, beta, h)
     print(f"Generated state space with {state_space.shape[0]} states (dimension = {d}).")
 
-    def f(S):
+
+    def dist2indp(S):
         _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
         val = 0.0
         for e in S:
             _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {e})
             val += compute_entropy_rate(P_e, pi_e)
         val -= compute_entropy_rate(PS, piS)
+        return val
+
+    def f(S):
+        val = 0.0
+        for coord in S:
+            val += dist2indp(coord)
         return -val
     
     def c(S):
         val = 0.0
-        for e in S:
-            _, pi_minus, P_minus = leave_S_out_mat(P, state_space, pi, {e})
-            _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {e})
-            val += KL_divergence_gpu(pi, P, compute_outer_product_gpu(P_e, P_minus))
+        for j, coord in enumerate(S):
+            for elem in coord:
+                Vj_minus_elem = set(V[j]) - {elem}
+                _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {elem})
+                _, pi_V, P_V = keep_S_in_mat(P, state_space, pi, V[j])
+                _, pi_V_minus_elem, P_V_minus_elem = keep_S_in_mat(P, state_space, pi, Vj_minus_elem)
+                val += KL_divergence_gpu(pi_V, P_V, compute_outer_product_gpu(P_e, P_V_minus_elem))
         return val
-
+    
     def g(S):
         return f(S) + c(S)
-
-    U = set(range(d))
-    for m in range(2, d + 1):
-        distorted_subset = distorted_greedy(g, c, U, m)
-        greedy_subset = greedy(f, U, m)
-        print(f"m={m}; Greedy subset chosen: {greedy_subset}; Value: {-f(greedy_subset)}")
-        print(f"m={m}; Distorted Greedy subset chosen: {distorted_subset}; Value: {-f(distorted_subset)}")
-        #all_subsets = [set(combination) for combination in combinations(range(d), m)]
-        #print(f"All: {[-f(S) for S in all_subsets]} \n\n")
+    
+    for m in range(k + 1, d + 1):
+        S = distorted_greedy_k_submod(g, c, V, m, k)
+        print(f"Cardinality constraint {m}; Subset chosen: {S}; Value: {-f(S)}")
