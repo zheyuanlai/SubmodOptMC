@@ -93,3 +93,22 @@ Cardinality constraint 7; Subset chosen: [{0, 2, 3}, {4, 6}, {9, 7}]; Value: 0.0
 Cardinality constraint 8; Subset chosen: [{0, 2, 3}, {5, 4, 6}, {9, 7}]; Value: 0.06028717756271362
 Cardinality constraint 9; Subset chosen: [{0, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 0.0797167420387268
 Cardinality constraint 10; Subset chosen: [{0, 1, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 0.109108567237854
+
+Greedy - Distance to independence of the complement set
+Generated state space with 1024 states (dimension = 10).
+m=1; Greedy subset chosen: {0}; Value: 0.3910212516784668
+m=2; Greedy subset chosen: {0, 9}; Value: 0.2831442356109619
+m=3; Greedy subset chosen: {0, 9, 4}; Value: 0.19981515407562256
+m=4; Greedy subset chosen: {0, 9, 4, 6}; Value: 0.13516855239868164
+m=5; Greedy subset chosen: {0, 2, 4, 6, 9}; Value: 0.08522534370422363
+m=6; Greedy subset chosen: {0, 2, 4, 6, 7, 9}; Value: 0.04844546318054199
+m=7; Greedy subset chosen: {0, 2, 3, 4, 6, 7, 9}; Value: 0.02303779125213623
+m=8; Greedy subset chosen: {0, 2, 3, 4, 6, 7, 8, 9}; Value: 0.007363498210906982
+
+Generalized distorted greedy - distance to independence of the complement set
+Cardinality constraint 1; Subset chosen: [{1}, set(), set()]; Value: 0.0797167420387268
+Cardinality constraint 2; Subset chosen: [{1}, set(), {8}]; Value: 0.06028717756271362
+Cardinality constraint 3; Subset chosen: [{1}, {5}, {8}]; Value: 0.041718244552612305
+Cardinality constraint 4; Subset chosen: [{2, 1}, {5}, {8}]; Value: 0.023759841918945312
+Cardinality constraint 5; Subset chosen: [{1, 2}, {5}, {8, 9}]; Value: 0.015561938285827637
+Cardinality constraint 6; Subset chosen: [{1, 2, 0}, {5}, {8, 9}]; Value: 0.007776319980621338

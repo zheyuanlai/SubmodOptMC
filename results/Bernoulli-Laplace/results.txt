@@ -110,3 +110,23 @@ Cardinality constraint 7; Subset chosen: [{0, 1, 2}, {5, 4}, {8, 7}]; Value: 0.2
 Cardinality constraint 8; Subset chosen: [{0, 1, 2}, {5, 4, 6}, {8, 7}]; Value: 0.3072708249092102
 Cardinality constraint 9; Subset chosen: [{0, 1, 2, 3}, {5, 4, 6}, {8, 7}]; Value: 0.4120221734046936
 Cardinality constraint 10; Subset chosen: [{0, 1, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 0.5892515182495117
+
+Greedy (dim=10) - distance to independence of the complement set
+Generated chain with product state space of dimension 10 (total states = 1024)
+m=1; Greedy subset chosen: {8}; Value: 1.4122564792633057
+m=2; Greedy subset chosen: {8, 9}; Value: 1.015756368637085
+m=3; Greedy subset chosen: {8, 9, 7}; Value: 0.7417101860046387
+m=4; Greedy subset chosen: {8, 9, 6, 7}; Value: 0.5244119167327881
+m=5; Greedy subset chosen: {5, 6, 7, 8, 9}; Value: 0.34752750396728516
+m=6; Greedy subset chosen: {4, 5, 6, 7, 8, 9}; Value: 0.20793282985687256
+m=7; Greedy subset chosen: {3, 4, 5, 6, 7, 8, 9}; Value: 0.10318148136138916
+m=8; Greedy subset chosen: {2, 3, 4, 5, 6, 7, 8, 9}; Value: 0.034059762954711914
+
+Generalized distorted greedy - distance to independence of the complement set
+Generated chain with product state space of dimension 10 (total states = 1024)
+Cardinality constraint 1; Subset chosen: [set(), set(), {9}]; Value: 0.4120221734046936
+Cardinality constraint 2; Subset chosen: [{3}, set(), {9}]; Value: 0.3072708249092102
+Cardinality constraint 3; Subset chosen: [{3}, {6}, {9}]; Value: 0.21198540925979614
+Cardinality constraint 4; Subset chosen: [{2, 3}, {6}, {9}]; Value: 0.1428636908531189
+Cardinality constraint 5; Subset chosen: [{2, 3}, {6}, {8, 9}]; Value: 0.07998931407928467
+Cardinality constraint 6; Subset chosen: [{2, 3}, {4, 6}, {8, 9}]; Value: 0.034059762954711914
