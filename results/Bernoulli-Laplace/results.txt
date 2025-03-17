@@ -130,3 +130,29 @@ Cardinality constraint 3; Subset chosen: [{3}, {6}, {9}]; Value: 0.2119854092597
 Cardinality constraint 4; Subset chosen: [{2, 3}, {6}, {9}]; Value: 0.1428636908531189
 Cardinality constraint 5; Subset chosen: [{2, 3}, {6}, {8, 9}]; Value: 0.07998931407928467
 Cardinality constraint 6; Subset chosen: [{2, 3}, {4, 6}, {8, 9}]; Value: 0.034059762954711914
+
+Greedy - distance to stationarity
+Generated chain with product state space of dimension 10 (total states = 1024)
+Cardinality constraint 1; Greedy subset chosen: {0}; Value: 0.2669300436973572
+Cardinality constraint 2; Greedy subset chosen: {0, 1}; Value: 0.5942142009735107
+Cardinality constraint 3; Greedy subset chosen: {0, 1, 6}; Value: 0.9885569214820862
+Cardinality constraint 4; Greedy subset chosen: {0, 1, 6, 9}; Value: 1.4733012914657593
+Cardinality constraint 5; Greedy subset chosen: {0, 1, 6, 8, 9}; Value: 2.0788936614990234
+Cardinality constraint 6; Greedy subset chosen: {0, 1, 6, 7, 8, 9}; Value: 2.8583438396453857
+Cardinality constraint 7; Greedy subset chosen: {0, 1, 5, 6, 7, 8, 9}; Value: 3.7019619941711426
+Cardinality constraint 8; Greedy subset chosen: {0, 1, 4, 5, 6, 7, 8, 9}; Value: 4.697902679443359
+Cardinality constraint 9; Greedy subset chosen: {0, 1, 3, 4, 5, 6, 7, 8, 9}; Value: 5.9191107749938965
+Cardinality constraint 10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 7.56130313873291
+
+Batch greedy - distance to stationarity
+Generated chain with product state space of dimension 10 (total states = 1024)
+Cardinality constraint 1; Batch greedy subset chosen: {0}; Value: 0.2669300436973572
+Cardinality constraint 2; Batch greedy subset chosen: {0, 1}; Value: 0.5942142009735107
+Cardinality constraint 3; Batch greedy subset chosen: {0, 1, 6}; Value: 0.9885569214820862
+Cardinality constraint 4; Batch greedy subset chosen: {0, 1, 3, 6}; Value: 1.4608168601989746
+Cardinality constraint 5; Batch greedy subset chosen: {0, 1, 3, 6, 9}; Value: 2.0322647094726562
+Cardinality constraint 6; Batch greedy subset chosen: {0, 1, 3, 6, 8, 9}; Value: 2.7322473526000977
+Cardinality constraint 7; Batch greedy subset chosen: {0, 1, 3, 6, 7, 8, 9}; Value: 3.642860174179077
+Cardinality constraint 8; Batch greedy subset chosen: {0, 1, 3, 5, 6, 7, 8, 9}; Value: 4.656210899353027
+Cardinality constraint 9; Batch greedy subset chosen: {0, 1, 3, 4, 5, 6, 7, 8, 9}; Value: 5.9191107749938965
+Cardinality constraint 10; Batch greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 7.56130313873291
