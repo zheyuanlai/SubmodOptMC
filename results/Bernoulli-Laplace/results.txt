@@ -208,3 +208,20 @@ Cardinality constraint 7; Subset chosen: [{0, 3, 1}, {4, 5}, {8, 7}]; Value: 0.7
 Cardinality constraint 8; Subset chosen: [{0, 3, 1, 2}, {4, 5}, {8, 7}]; Value: 0.4856567084789276
 Cardinality constraint 9; Subset chosen: [{0, 3, 1, 2}, {4, 5, 6}, {8, 7}]; Value: 0.23191459476947784
 Cardinality constraint 10; Subset chosen: [{0, 3, 1, 2}, {4, 5, 6}, {8, 9, 7}]; Value: 0
+
+Greedy vs batch greedy - distance to factorizability over a fixed set
+Generated chain with product state space of dimension 10 (total states = 1024)
+m=1; Greedy subset chosen: {9}; Value: 0.14671339094638824
+m=1; Batch greedy subset chosen: {9}; Value: 0.14671339094638824
+m=2; Greedy subset chosen: {8, 9}; Value: 0.2635357677936554
+m=2; Batch greedy subset chosen: {8, 9}; Value: 0.2635357677936554
+m=3; Greedy subset chosen: {8, 9, 7}; Value: 0.377871036529541
+m=3; Batch greedy subset chosen: {8, 9, 7}; Value: 0.377871036529541
+m=4; Greedy subset chosen: {8, 9, 6, 7}; Value: 0.49198341369628906
+m=4; Batch greedy subset chosen: {8, 9, 6, 7}; Value: 0.49198341369628906
+m=5; Greedy subset chosen: {5, 6, 7, 8, 9}; Value: 0.6190757751464844
+m=5; Batch greedy subset chosen: {5, 6, 7, 8, 9}; Value: 0.6190757751464844
+m=6; Greedy subset chosen: {4, 5, 6, 7, 8, 9}; Value: 0.798892080783844
+m=6; Batch greedy subset chosen: {4, 5, 6, 7, 8, 9}; Value: 0.798892080783844
+m=7; Greedy subset chosen: {3, 4, 5, 6, 7, 8, 9}; Value: 1.0699273347854614
+m=7; Batch greedy subset chosen: {3, 4, 5, 6, 7, 8, 9}; Value: 1.0699273347854614
