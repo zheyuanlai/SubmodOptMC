@@ -242,7 +242,7 @@ if __name__ == "__main__":
     U = set(range(d))
 
     for m in range(1, d):
-        l = m // 2 + 1
+        l = np.ceil(m / 2).astype(int)
         q = [2] * (l - 1) + [m - 2 * (l - 1)]
         subset = batch_greedy(f, U, m, l, q)
         print(f"Cardinality constraint {m}; Batch greedy subset chosen: {subset}; Value: {f(subset)}")
