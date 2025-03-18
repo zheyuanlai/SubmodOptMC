@@ -2,10 +2,23 @@ import torch
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from itertools import product
+from itertools import product, combinations
 
 # ---- Device selection ----
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+"""
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+    print("Using MPS device")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using CUDA device")
+else:
+    device = torch.device("cpu")
+    print("Using CPU device")
+"""
+device = torch.device("cpu")
+
+
 # -----------------------
 # JIT-compiled helper functions
 # -----------------------
@@ -217,7 +230,7 @@ def torch_MC_generation_vec(N, d, l_values, s, product_form=True):
         A_n = torch.matmul(M_n, M_n.t())
         A += beta_n * A_n
     A = torch.clamp(A, min=0.0)
-    P = A * pi.unsqueeze(0)  # weight columns by pi
+    P = A * pi.unsqueeze(0)
     P = P / (P.sum(dim=1, keepdim=True) + 1e-15)
     P = torch.clamp(P, min=0.0)
     P = P / (P.sum(dim=1, keepdim=True) + 1e-15)
@@ -262,6 +275,9 @@ def leave_S_out_mat(P, state_space, pi, S):
     Sbar = set(range(state_space.shape[1])) - set(S)
     return keep_S_in_mat(P, state_space, pi, Sbar)
 
+# -----------------------------------------------------------------------
+#  Entropy Rate
+# -----------------------------------------------------------------------
 def compute_entropy_rate(P, pi):
     """
     H(P) = - sum_{x,y} pi[x]*P[x,y]*log(P[x,y]).
@@ -288,44 +304,12 @@ def compute_outer_product_gpu(A, B):
     """
     return torch.kron(A, B)
 
-def distorted_greedy_k_submod(g, c, V, m, k):
-    """
-    Generalized distorted greedy for k-submodular optimization:
-    We want to approximately maximize f(S) = g(S) - c(S),
-    where g is k-submodular & monotone, c is a nonnegative modular function,
-    S = (S[0], ..., S[k-1]) with S[j] ⊆ V[j].
-    V is a list/tuple: V[j] is the "universe" for the j-th coordinate.
-    m is total cardinality bound: sum_j |S[j]| ≤ m.
-    """
-    S = [set() for _ in range(k)]
-
-    for i in range(m):
-        best_gain = float('-inf')
-        best_j    = None
-        best_e    = None
-
-        factor = (1.0 - 1.0/m)**(m - (i+1))
-
-        for j in range(k):
-            for e in (V[j] - S[j]):
-                old_g = g(S)
-                old_c = c(S)
-                S[j].add(e)
-                new_g = g(S)
-                new_c = c(S)
-                S[j].remove(e)
-
-                inc_g = new_g - old_g
-                cost_e = new_c - old_c
-                gain = factor*inc_g - cost_e
-
-                if gain > best_gain:
-                    best_gain = gain
-                    best_j = j
-                    best_e = e
-
-        S[best_j].add(best_e)
-
+def greedy(f, X, k):
+    S = set()
+    for i in range(k):
+        gains = [(f(S.union({e})) - f(S), e) for e in X - S]
+        gain, elem = max(gains)
+        if gain > 0: S.add(elem)
     return S
 
 def plot_objective_per_iteration(f_values):
@@ -346,47 +330,19 @@ def plot_objective_per_iteration(f_values):
 # -----------------------------------------------------------------------
 if __name__=="__main__":
     N = 5
-    d = N + 1  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [N]  # sum = 10+15=25 > N=10.
+    d = N + 1
+    l_values = [1]*(d-1) + [N]
     s = 1
 
-    k = 3
-    V = [
-        set([0, 1]),
-        set([2]),
-        set([3, 4])
-    ]
-
-    # Generate Markov chain with vectorized operations:
     state_space, pi, P = torch_MC_generation_vec(N, d, l_values, s, product_form=True)
     print(f"Generated chain with product state space of dimension {d-1} (total states = {state_space.shape[0]})")
 
-    def dist2stat(S):
-        _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
-        _, piSbar, PSbar = leave_S_out_mat(P, state_space, pi, S)
-        return KL_divergence_gpu(piS, PS, piS.repeat(len(piS), 1))
-
     def f(S):
-        val = 0.0
-        for coord in S:
-            val += dist2stat(coord)
-        return -val
-    
-    def c(S):
-        val = 0.0
-        for j, coord in enumerate(S):
-            for elem in coord:
-                Vj_minus_elem = set(V[j]) - {elem}
-                _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {elem})
-                _, pi_V, P_V = keep_S_in_mat(P, state_space, pi, V[j])
-                _, pi_V_minus_elem, P_V_minus_elem = keep_S_in_mat(P, state_space, pi, Vj_minus_elem)
-                val += KL_divergence_gpu(pi_V, P_V, compute_outer_product_gpu(P_e, P_V_minus_elem))
-                val += KL_divergence_gpu(pi_e, P_e, pi_e.repeat(len(pi_e), 1))
-        return val
-    
-    def g(S):
-        return f(S) + c(S)
-    
+        _, pi_minus_S, P_minus_S = leave_S_out_mat(P, state_space, pi, S)
+        return -KL_divergence_gpu(pi_minus_S, P_minus_S, pi_minus_S.repeat(len(pi_minus_S), 1))
+
+    U = set(range(d - 1))
+
     for m in range(1, d):
-        S = distorted_greedy_k_submod(g, c, V, m, k)
-        print(f"m={m}; Subset chosen: {S}; Value: {-f(S)}")
+        greedy_subset = greedy(f, U, m)
+        print(f"m={m}; Greedy subset chosen: {greedy_subset}; Value: {-f(greedy_subset)}")

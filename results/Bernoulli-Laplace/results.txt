@@ -156,3 +156,55 @@ Cardinality constraint 7; Batch greedy subset chosen: {0, 1, 3, 6, 7, 8, 9}; Val
 Cardinality constraint 8; Batch greedy subset chosen: {0, 1, 3, 5, 6, 7, 8, 9}; Value: 4.656210899353027
 Cardinality constraint 9; Batch greedy subset chosen: {0, 1, 3, 4, 5, 6, 7, 8, 9}; Value: 5.9191107749938965
 Cardinality constraint 10; Batch greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 7.56130313873291
+
+Distorted greedy - distance to stationarity
+Generated chain with product state space of dimension 10 (total states = 1024)
+m=1; Distorted Greedy subset chosen: {9}; Value: 0.23219281435012817
+m=2; Distorted Greedy subset chosen: {0, 9}; Value: 0.577185332775116
+m=3; Distorted Greedy subset chosen: {0, 1, 9}; Value: 0.9855216145515442
+m=4; Distorted Greedy subset chosen: {0, 1, 2, 4}; Value: 1.4531447887420654
+m=5; Distorted Greedy subset chosen: {0, 1, 2, 3, 4}; Value: 1.9987099170684814
+m=6; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5}; Value: 2.6382100582122803
+m=7; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6}; Value: 3.391685962677002
+m=8; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7}; Value: 4.300936698913574
+m=9; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 9}; Value: 5.469500541687012
+m=10; Distorted Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 7.56130313873291
+
+Greedy - distance to stationarity of the complement set
+Generated chain with product state space of dimension 10 (total states = 1024)
+m=1; Greedy subset chosen: {8}; Value: 5.469500541687012
+m=2; Greedy subset chosen: {8, 9}; Value: 4.300936698913574
+m=3; Greedy subset chosen: {8, 9, 7}; Value: 3.391685962677002
+m=4; Greedy subset chosen: {8, 9, 6, 7}; Value: 2.6382100582122803
+m=5; Greedy subset chosen: {5, 6, 7, 8, 9}; Value: 1.9987099170684814
+m=6; Greedy subset chosen: {3, 5, 6, 7, 8, 9}; Value: 1.4531447887420654
+m=7; Greedy subset chosen: {2, 3, 5, 6, 7, 8, 9}; Value: 0.9862982630729675
+m=8; Greedy subset chosen: {0, 2, 3, 5, 6, 7, 8, 9}; Value: 0.5896126627922058
+m=9; Greedy subset chosen: {0, 1, 2, 3, 5, 6, 7, 8, 9}; Value: 0.25829967856407166
+m=10; Greedy subset chosen: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; Value: 0
+
+Generalized distorted greedy - distance to stationarity of the tensorized output
+Generated chain with product state space of dimension 10 (total states = 1024)
+m=1; Subset chosen: [set(), set(), {9}]; Value: 0.23191459476947784
+m=2; Subset chosen: [set(), {6}, {9}]; Value: 0.4856567084789276
+m=3; Subset chosen: [{3}, {6}, {9}]; Value: 0.7478712797164917
+m=4; Subset chosen: [{2, 3}, {6}, {9}]; Value: 1.0782043933868408
+m=5; Subset chosen: [{2, 3}, {4, 6}, {9}]; Value: 1.4121806621551514
+m=6; Subset chosen: [{2, 3}, {4, 6}, {9, 7}]; Value: 1.7615658044815063
+m=7; Subset chosen: [{0, 2, 3}, {4, 6}, {9, 7}]; Value: 2.1577775478363037
+m=8; Subset chosen: [{0, 2, 3}, {5, 4, 6}, {9, 7}]; Value: 2.566317081451416
+m=9; Subset chosen: [{0, 2, 3}, {5, 4, 6}, {8, 9, 7}]; Value: 3.027449369430542
+m=10; Subset chosen: [{0, 2, 3, 1}, {5, 4, 6}, {8, 9, 7}]; Value: 3.4932570457458496
+
+Generalized distorted greedy - distance to stationarity of the complement set
+Generated chain with product state space of dimension 10 (total states = 1024)
+Cardinality constraint 1; Subset chosen: [{3}, set(), set()]; Value: 3.0266761779785156
+Cardinality constraint 2; Subset chosen: [{3}, set(), {8}]; Value: 2.5655441284179688
+Cardinality constraint 3; Subset chosen: [{3}, {5}, {8}]; Value: 2.1570043563842773
+Cardinality constraint 4; Subset chosen: [{0, 3}, {5}, {8}]; Value: 1.7623512744903564
+Cardinality constraint 5; Subset chosen: [{0, 3}, {5}, {8, 7}]; Value: 1.412966012954712
+Cardinality constraint 6; Subset chosen: [{0, 3}, {4, 5}, {8, 7}]; Value: 1.0789897441864014
+Cardinality constraint 7; Subset chosen: [{0, 3, 1}, {4, 5}, {8, 7}]; Value: 0.749549925327301
+Cardinality constraint 8; Subset chosen: [{0, 3, 1, 2}, {4, 5}, {8, 7}]; Value: 0.4856567084789276
+Cardinality constraint 9; Subset chosen: [{0, 3, 1, 2}, {4, 5, 6}, {8, 7}]; Value: 0.23191459476947784
+Cardinality constraint 10; Subset chosen: [{0, 3, 1, 2}, {4, 5, 6}, {8, 9, 7}]; Value: 0

@@ -323,8 +323,7 @@ def distorted_greedy_k_submod(g, c, V, m, k):
                     best_gain = gain
                     best_j = j
                     best_e = e
-
-        S[best_j].add(best_e)
+        if best_gain > 0: S[best_j].add(best_e)
 
     return S
 
@@ -361,32 +360,19 @@ if __name__=="__main__":
     state_space, pi, P = torch_MC_generation_vec(N, d, l_values, s, product_form=True)
     print(f"Generated chain with product state space of dimension {d-1} (total states = {state_space.shape[0]})")
 
-    def dist2stat(S):
-        _, piS, PS = keep_S_in_mat(P, state_space, pi, S)
-        _, piSbar, PSbar = leave_S_out_mat(P, state_space, pi, S)
+    def dist2stat_c(V, S):
+        _, piS, PS = keep_S_in_mat(P, state_space, pi, V - S)
         return KL_divergence_gpu(piS, PS, piS.repeat(len(piS), 1))
 
-    def f(S):
+    def g(S):
         val = 0.0
-        for coord in S:
-            val += dist2stat(coord)
+        for j, coord in enumerate(S):
+            val += dist2stat_c(V[j], coord)
         return -val
     
     def c(S):
-        val = 0.0
-        for j, coord in enumerate(S):
-            for elem in coord:
-                Vj_minus_elem = set(V[j]) - {elem}
-                _, pi_e, P_e = keep_S_in_mat(P, state_space, pi, {elem})
-                _, pi_V, P_V = keep_S_in_mat(P, state_space, pi, V[j])
-                _, pi_V_minus_elem, P_V_minus_elem = keep_S_in_mat(P, state_space, pi, Vj_minus_elem)
-                val += KL_divergence_gpu(pi_V, P_V, compute_outer_product_gpu(P_e, P_V_minus_elem))
-                val += KL_divergence_gpu(pi_e, P_e, pi_e.repeat(len(pi_e), 1))
-        return val
-    
-    def g(S):
-        return f(S) + c(S)
+        return 0.0
     
     for m in range(1, d):
         S = distorted_greedy_k_submod(g, c, V, m, k)
-        print(f"m={m}; Subset chosen: {S}; Value: {-f(S)}")
+        print(f"Cardinality constraint {m}; Subset chosen: {S}; Value: {-g(S)}")
