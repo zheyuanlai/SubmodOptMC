@@ -1,7 +1,7 @@
 <div align="center">
 <h3>Information-theoretic subset selection of multivariate Markov chains via submodular optimization</h3>
 
-🌐 [[Homepage]](https://zheyuanlai.github.io/SubmodOptMC) | 💻 [[GitHub]](https://github.com/zheyuanlai/SubmodOptMC)
+💻 [[GitHub]](https://github.com/zheyuanlai/SubmodOptMC)
 </div>
 
 ## 📁 Code Structure
