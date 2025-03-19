@@ -22,7 +22,7 @@ This project aims to addresses the challenges regarding subset selection in mult
 ```
 
 ## 🔬 Numerical Experiments
-We consider the multivariate Markov chains inspired by the Bernoulli-Laplace level model [7] and the Curie-Weiss model [1] (see Section 7.1 and Section 7.2 of our paper). We examine the performance of the following algorithms on both models:
+We consider the multivariate Markov chains associated with the Bernoulli-Laplace level model [7] and the Curie-Weiss model [1] (see Section 7.1 and Section 7.2 of our paper). We examine the performance of the following algorithms on both models:
 
 * Heuristic greedy algorithm (see Section 4 of [11])
 * Distorted greedy algorithm [5] (see Algorithm 2 of our paper)
