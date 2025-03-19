@@ -1,8 +1,19 @@
 <div align="center">
 <h3>Information-theoretic subset selection of multivariate Markov chains via submodular optimization</h3>
 
+[Zheyuan Lai](https://zheyuanlai.github.io)* and [Michael C.H. Choi](https://mchchoi.github.io)†
+
+*: Department of Statistics and Data Science, National University of Singapore, Singapore; Email: zheyuan_lai@u.nus.edu
+
+†: Department of Statistics and Data Science and Yale-NUS College, National University of Singapore, Singapore; Email: mchchoi@nus.edu.sg, corresponding author
+
 💻 [[GitHub]](https://github.com/zheyuanlai/SubmodOptMC)
 </div>
+
+<details>
+<summary>📄 Abstract</summary>
+Given a finite ergodic multivariate Markov chain on a product state space, this paper seeks to find an optimal projected Markov chain with respect to information-theoretic objective functions and subjected to suitable cardinality constraints. The objectives that we consider include the classical entropy rate, information-theoretic distance to factorizability, distance to independence as well as distance to stationarity. These combinatorial optimization problems can be broadly understood as best subset selection in the context of multivariate Markov chains. As these set functions are submodular (or supermodular), we design greedy-based algorithms to solve for these problems along with theoretical guarantees. We extend our analysis to the multivariate setting, and propose a generalized distorted greedy algorithm for maximizing $k$-submodular functions subjected to cardinality constraints, which is of independent interests. We provide numerical experiments of multivariate Markov chains associated with the Bernoulli-Laplace model and the Curie-Weiss model that demonstrate the performance of the greedy algorithms.
+</details>
 
 ## 👋 Overview
 This project aims to addresses the challenges regarding subset selection in multivariate Markov chains by integrating information theory with submodular optimization. Motivated by the need to efficiently capture and quantify dependencies in high-dimensional stochastic systems, our framework identifies optimal subsets subject to some cardinality constraints through principled information-theoretic criteria in the Markov chain theory. By employing advanced greedy algorithms with provable theoretical guarantees, this framework ensures scalable and efficient solutions for complex stochastic systems.
@@ -11,18 +22,18 @@ This project aims to addresses the challenges regarding subset selection in mult
 
 ```
 /SubmodOptMC
-├── dist2fact/              # Distance to factorizability (Section 3 of the paper)
-├── dist2fact_fixed/        # Distance to factorizability over a fixed set (Section 6 of the paper)
-├── dist2indp/              # Distance to independence (Section 4 of the paper)
-├── dist2stat/              # Distance to stationarity (Section 5 of the paper)
-├── entropy_rate/           # Entropy rate (Section 2 of the paper)
+├── dist2fact/              # Distance to factorizability (Section 4 of the paper)
+├── dist2fact_fixed/        # Distance to factorizability over a fixed set (Section 7 of the paper)
+├── dist2indp/              # Distance to independence (Section 5 of the paper)
+├── dist2stat/              # Distance to stationarity (Section 6 of the paper)
+├── entropy_rate/           # Entropy rate (Section 3 of the paper)
 ├── results/                # Numerical experiment results
 ├── README.md               # Project README file
 └── requirements.txt        # Python dependencies
 ```
 
 ## 🔬 Numerical Experiments
-We consider the multivariate Markov chains associated with the Bernoulli-Laplace level model [7] and the Curie-Weiss model [1] (see Section 7.1 and Section 7.2 of our paper). We examine the performance of the following algorithms on both models:
+We consider the multivariate Markov chains associated with the Bernoulli-Laplace level model [7] and the Curie-Weiss model [1] (see Section 8.1 and Section 8.2 of our paper). We examine the performance of the following algorithms on both models:
 
 * Heuristic greedy algorithm (see Section 4 of [11])
 * Distorted greedy algorithm [5] (see Algorithm 2 of our paper)
