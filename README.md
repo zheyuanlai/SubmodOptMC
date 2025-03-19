@@ -4,6 +4,9 @@
 💻 [[GitHub]](https://github.com/zheyuanlai/SubmodOptMC)
 </div>
 
+## 👋 Overview
+This project aims to addresses the challenges regarding subset selection in multivariate Markov chains by integrating information theory with submodular optimization. Motivated by the need to efficiently capture and quantify dependencies in high-dimensional stochastic systems, our framework identifies optimal subsets subject to some cardinality constraints through principled information-theoretic criteria in the Markov chain theory. By employing advanced greedy algorithms with provable theoretical guarantees, this framework ensures scalable and efficient solutions for complex stochastic systems.
+
 ## 📁 Code Structure
 
 ```
@@ -17,6 +20,32 @@
 ├── README.md               # Project README file
 └── requirements.txt        # Python dependencies
 ```
+
+## 🔬 Numerical Experiments
+We consider the multivariate Markov chains inspired by the Bernoulli-Laplace level model [7] and the Curie-Weiss model [1] (see Section 7.1 and Section 7.2 of our paper). We examine the performance of the following algorithms on both models:
+
+* Heuristic greedy algorithm (see Section 4 of [11])
+* Distorted greedy algorithm [5] (see Algorithm 2 of our paper)
+* Generalized distorted greedy algorithm (see Algorithm 3 of our paper)
+* Batch greedy algorithm [6] (see Algorithm 4 of our paper)
+
+## ⌨️ Usage
+To reproduce the numerical experiments presented in the manuscript:
+1. Set up a new Conda environment:
+```bash
+conda create -n submodular python=3.10 -y
+conda activate submodular
+```
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+3. Navigate to the relevant folder (e.g., `entropy_rate/`) and run the experiment scripts.
+
+## 📊 Results
+The `results/Bernoulli-Laplace/` and `results/Curie-Weiss/` folders contain:
+* Plots comparing the performance of different algorithms.
+* Logs and output files from the numerical experiments.
 
 ## 📚 References
 

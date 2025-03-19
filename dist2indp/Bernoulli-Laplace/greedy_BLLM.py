@@ -5,19 +5,7 @@ import matplotlib.pyplot as plt
 from itertools import product
 
 # ---- Device selection ----
-"""
-if torch.backends.mps.is_available():
-    device = torch.device("mps")
-    print("Using MPS device")
-elif torch.cuda.is_available():
-    device = torch.device("cuda")
-    print("Using CUDA device")
-else:
-    device = torch.device("cpu")
-    print("Using CPU device")
-"""
-device = torch.device("cpu")
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # -----------------------
 # JIT-compiled helper functions
@@ -342,9 +330,9 @@ def plot_objective_per_iteration(f_values):
 #  MAIN
 # -----------------------------------------------------------------------
 if __name__=="__main__":
-    N = 5
-    d = N + 1  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [N]  # sum = 10+15=25 > N=10.
+    N = 10
+    d = N + 1
+    l_values = [1]*(d-1) + [N]
     s = 1
 
     # Generate Markov chain with vectorized operations:

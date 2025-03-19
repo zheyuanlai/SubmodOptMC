@@ -6,6 +6,7 @@ from itertools import product
 
 # ---- Device selection ----
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # -----------------------
 # JIT-compiled helper functions
 # -----------------------
@@ -345,16 +346,16 @@ def plot_objective_per_iteration(f_values):
 #  MAIN
 # -----------------------------------------------------------------------
 if __name__=="__main__":
-    N = 5
-    d = N + 1  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [N]  # sum = 10+15=25 > N=10.
+    N = 10
+    d = N + 1
+    l_values = [1]*(d-1) + [N]
     s = 1
 
     k = 3
     V = [
-        set([0, 1]),
-        set([2]),
-        set([3, 4])
+        set(range(0, 4)),
+        set(range(4, 7)),
+        set(range(7, 10))
     ]
 
     # Generate Markov chain with vectorized operations:

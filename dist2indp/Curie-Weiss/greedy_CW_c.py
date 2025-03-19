@@ -17,15 +17,7 @@ import matplotlib.pyplot as plt
 from itertools import product, combinations
 
 # ---- Device selection ----
-if torch.backends.mps.is_available():
-    device = torch.device("mps")
-    print("Using MPS device")
-elif torch.cuda.is_available():
-    device = torch.device("cuda")
-    print("Using CUDA device")
-else:
-    device = torch.device("cpu")
-    print("Using CPU device")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # -----------------------
 # State space generation
@@ -208,10 +200,10 @@ def plot_objective_per_iteration(f_values):
 # -----------------------
 if __name__ == "__main__":
     # Parameters for the Curie–Weiss model:
-    d = 5            # number of spins
+    d = 10            # number of spins
     beta = 0.1        # inverse temperature
     h = 1           # external magnetic field
-    # Choose beta=0.1 and h=0.0 for the Curie–Weiss model to maximize the entropy rate.
+    # Choose beta=0.1 and h=1.0 for the Curie–Weiss model to maximize the entropy rate.
 
     state_space = get_product_state_space(d)
     pi = stat_dist_MC_generation(state_space, beta, h)

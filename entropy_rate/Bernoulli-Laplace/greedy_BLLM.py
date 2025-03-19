@@ -11,15 +11,7 @@ import matplotlib.pyplot as plt
 from itertools import product
 
 # ---- Device selection ----
-if torch.backends.mps.is_available():
-    device = torch.device("mps")
-    print("Using MPS device")
-elif torch.cuda.is_available():
-    device = torch.device("cuda")
-    print("Using CUDA device")
-else:
-    device = torch.device("cpu")
-    print("Using CPU device")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # -----------------------
 # JIT-compiled helper functions
@@ -302,10 +294,9 @@ def plot_objective_per_iteration(f_values):
 # MAIN
 # -----------------------
 if __name__ == "__main__":
-    # Parameters for product state space:
     N = 10
-    d = 11  # free coordinates = d-1 = 10
-    l_values = [1]*(d-1) + [10]  # sum = 10+15=25 > N=10.
+    d = 11
+    l_values = [1]*(d-1) + [10]
     s = 1
 
     # Generate Markov chain with vectorized operations:
@@ -321,4 +312,3 @@ if __name__ == "__main__":
     U = set(range(d-1))
     f_values = greedy(submod_func, U, d-1)
     print("Objective values:", f_values)
-    plot_objective_per_iteration(f_values)
