@@ -7,7 +7,7 @@
 
 †: Department of Statistics and Data Science and Yale-NUS College, National University of Singapore, Singapore; Email: mchchoi@nus.edu.sg, corresponding author
 
-💻 [[GitHub]](https://github.com/zheyuanlai/SubmodOptMC)
+📜 [[ArXiv]](https://arxiv.org/abs/2503.23340) | 💻 [[GitHub]](https://github.com/zheyuanlai/SubmodOptMC)
 </div>
 
 <details>
