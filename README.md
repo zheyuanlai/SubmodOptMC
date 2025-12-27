@@ -1,5 +1,5 @@
 <div align="center">
-<h3>Information-theoretic subset selection of multivariate Markov chains via submodular optimization</h3>
+<h3>Information-theoretic coordinate subset and partition selection of multivariate Markov chains via submodular optimization</h3>
 
 [Zheyuan Lai](https://zheyuanlai.github.io)* and [Michael C.H. Choi](https://mchchoi.github.io)†
 
@@ -12,7 +12,7 @@
 
 <details>
 <summary>📄 Abstract</summary>
-We study the problem of optimally projecting the transition matrix of a finite ergodic multivariate Markov chain onto a lower-dimensional state space. Specifically, we seek to construct a projected Markov chain that optimizes various information-theoretic criteria under cardinality constraints. These criteria include entropy rate, information-theoretic distance to factorizability, independence, and stationarity. We formulate these tasks as best subset selection problems over multivariate Markov chains and leverage the submodular (or supermodular) structure of the objective functions to develop efficient greedy-based algorithms with theoretical guarantees. We extend our analysis to $k$-submodular settings and introduce a generalized version of the distorted greedy algorithm, which may be of independent interest. Finally, we illustrate the theory and algorithms through extensive numerical experiments with publicly available code on multivariate Markov chains associated with the Bernoulli-Laplace and Curie-Weiss model.
+We study the problem of optimally projecting the transition matrix of a finite ergodic multivariate Markov chain onto a lower-dimensional state space, as well as the problem of finding an optimal partition of coordinates such that the factorized Markov chain gives minimal information loss compared to the original multivariate chain. Specifically, we seek to construct a Markov chain that optimizes various information-theoretic criteria under cardinality constraints. These criteria include entropy rate, information-theoretic distance to factorizability, independence, and stationarity. We formulate these tasks as best subset or partition selection problems over multivariate Markov chains and leverage the submodular (or supermodular) structure of the objective functions to develop efficient greedy-based algorithms with theoretical guarantees. We extend our analysis to $k$-submodular settings and introduce a generalized version of the distorted greedy algorithm, which may be of independent interest. Finally, we illustrate the theory and algorithms through extensive numerical experiments with publicly available code on multivariate Markov chains associated with the Bernoulli--Laplace and Curie--Weiss model.
 </details>
 
 ## 👋 Overview

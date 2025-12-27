@@ -3,3 +3,6 @@ dist2fact/old/
 dist2indp/old/
 entropy_rate/old/
 entropy_rate/old-BLLM/
+
+.mplconfig/
+manuscript.txt
